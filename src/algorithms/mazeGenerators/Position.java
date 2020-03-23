@@ -25,6 +25,7 @@ public class Position {
         this.visited = visited;
     }
 
+    public boolean getVisited(){ return this.visited; }
     public boolean isIswall() {
         return iswall;
     }

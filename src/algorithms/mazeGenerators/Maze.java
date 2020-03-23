@@ -18,18 +18,17 @@ public class Maze {
         mazeArr = new int[this.rows][this.columns];
         posarr = new Position[rows][columns];
         buildpositions(rows,columns);
+
     }
 
     private void buildpositions(int r , int c){
-        for (int i=0;i<r;i++){
-            for (int j=0;j<c;j++){
+        for (int i=0;i<r-1;i++){
+            for (int j=0;j<c-1;j++){
                 posarr[i][j] = new Position(i,j);
-                posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                posarr[i][j].getNeighbours().add(posarr[i][j+1]);
             }
         }
-        for (int i=0;i<r;i++){
-            for (int j=0;j<c;j++){
+        for (int i=0;i<r-1;i++){
+            for (int j=0;j<c-1;j++){
                 if (i==0 && j==0){
                     posarr[i][j].getNeighbours().add(posarr[i+1][j]);
                     posarr[i][j].getNeighbours().add(posarr[i][j+1]);
@@ -74,6 +73,10 @@ public class Maze {
                 }
             }
         }
+    }
+
+    public Position[][] getPosarr() {
+        return posarr;
     }
 
     public int getRows() {
