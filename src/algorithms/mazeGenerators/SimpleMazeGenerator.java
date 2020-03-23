@@ -8,7 +8,10 @@ public class SimpleMazeGenerator extends AMazeGenerator {
 
     @Override
     public Maze generate(int rows, int columns) {
-        Maze ret = new Maze(rows , columns);
+        Position start = new Position(0,0);
+        Position end = new Position(rows-1,columns-1);
+
+        Maze ret = new Maze(rows , columns,start,end);
 
         int[][] randMaze = new int[rows][columns];
         for (int i = 0 ; i < rows ; i++){
