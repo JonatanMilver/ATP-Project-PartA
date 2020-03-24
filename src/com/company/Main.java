@@ -1,15 +1,15 @@
 package com.company;
 
-import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.MyMazeGenerator;
-import algorithms.mazeGenerators.SimpleMazeGenerator;
+import algorithms.mazeGenerators.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        MyMazeGenerator s = new MyMazeGenerator();
-        Maze mazz = s.generate(4,4);
-        System.out.println(mazz);
-        System.out.println(s.measureAlgorithmsTimeMillis(10,10));
+        AMazeGenerator s = new MyMazeGenerator();
+        //Maze mazz = s.generate(1000,1000);
+        //Maze mazz = new Maze(100,100, new Position(0,0) , new Position(99,99));
+        //System.out.println(mazz.getPosArr());
+        //System.out.println(mazz);
+        System.out.println(s.measureAlgorithmsTimeMillis(1000,1000));
     }
 }

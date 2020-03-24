@@ -8,75 +8,19 @@ public class Maze {
     private Position StartPosition;
     private Position GoalPosition;
     private int[][] mazeArr;
-    private Position[][] posarr;
+    private Position[][] posArr;
 
     public Maze(int rows, int columns , Position StartPosition,Position GoalPosition) {
-        this.rows = 2*rows+1;
-        this.columns = 2*columns+1;
-        this.StartPosition = StartPosition;
-        this.GoalPosition = GoalPosition;
-        mazeArr = new int[this.rows][this.columns];
-        posarr = new Position[rows][columns];
-        buildpositions(rows,columns);
+        this.rows = rows;
+        this.columns = columns;
+        mazeArr = new int[rows][columns];
+        posArr = new Position[rows][columns];
+        buildPositions(rows,columns);
+        setNeighbours(rows, columns);
+        this.StartPosition = posArr[StartPosition.getRowIndex()][StartPosition.getColumnIndex()];
+        this.GoalPosition = posArr[GoalPosition.getRowIndex()][GoalPosition.getColumnIndex()];
 
-    }
 
-    private void buildpositions(int r , int c){
-        for (int i=0;i<r-1;i++){
-            for (int j=0;j<c-1;j++){
-                posarr[i][j] = new Position(i,j);
-            }
-        }
-        for (int i=0;i<r-1;i++){
-            for (int j=0;j<c-1;j++){
-                if (i==0 && j==0){
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                }
-                else if (i==0 && j == c-1){
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                }
-                else if (i==0 && j!=c-1){
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                }
-                else if (i==r-1 && j==0){
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                }
-                else if (i==r-1 && j==c-1){
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                }
-                else if (i==r-1 && j!=c-1){
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                }
-                else if (i != r-1 && i != 0 && j == 0){
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                }
-                else if (i != r-1 && i != 0 && j == c-1){
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                }
-                else{
-                    posarr[i][j].getNeighbours().add(posarr[i+1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j+1]);
-                    posarr[i][j].getNeighbours().add(posarr[i-1][j]);
-                    posarr[i][j].getNeighbours().add(posarr[i][j-1]);
-                }
-            }
-        }
-    }
-
-    public Position[][] getPosarr() {
-        return posarr;
     }
 
     public int getRows() {
@@ -95,6 +39,22 @@ public class Maze {
         this.columns = columns;
     }
 
+    public Position getStartPosition() {
+        return StartPosition;
+    }
+
+    public void setStartPosition(Position startPosition) {
+        StartPosition = startPosition;
+    }
+
+    public Position getGoalPosition() {
+        return GoalPosition;
+    }
+
+    public void setGoalPosition(Position goalPosition) {
+        GoalPosition = goalPosition;
+    }
+
     public int[][] getMazeArr() {
         return mazeArr;
     }
@@ -103,19 +63,113 @@ public class Maze {
         this.mazeArr = mazeArr;
     }
 
-    public Position getStartPosition() {
-        return StartPosition;
+    public Position[][] getPosArr() {
+        return posArr;
     }
 
-    public Position getGoalPosition() {
-        return GoalPosition;
+    public void setPosArr(Position[][] posArr) {
+        this.posArr = posArr;
     }
+
+    private void buildPositions(int rows, int columns){
+        for(int i=0;i<rows; i++){
+            for(int j=0;j<columns;j++){
+                posArr[i][j] = new Position(i,j);
+            }
+        }
+    }
+    private void setNeighbours(int rows, int columns){
+        for(int i=0;i<rows;i=i+2){
+            for(int j=0;j<columns;j=j+2){
+                if(i==0 && j==0){
+                    if(findPosition(2,0) != null)
+                        posArr[i][j].addNeighbour(findPosition(2, 0));
+                    if(findPosition(0,2) != null)
+                        posArr[i][j].addNeighbour(findPosition(0, 2));
+                }
+                else if(i==0 && j == columns-1){
+                    if(findPosition(0,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(0,j-2));
+                    if(findPosition(2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(2,j));
+                }
+                else if(j==0 && i == rows-1){
+                    if(findPosition(i-2,0) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2,0));
+                    if(findPosition(i,2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,2));
+                }
+                else if(j==columns-1 && i == rows-1){
+                    if(findPosition(i-2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2, j));
+                    if(findPosition(i,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i, j-2));
+                }
+                else if(i==rows-1){
+                    if(findPosition(i,j+2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j+2));
+                    if(findPosition(i,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j-2));
+                    if(findPosition(i-2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2,j));
+                }
+                else if(j==columns-1){
+                    if(findPosition(i+2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i+2,j));
+                    if(findPosition(i-2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2,j));
+                    if(findPosition(i,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j-2));
+                }
+                else if(i==0){
+                    if(findPosition(i+2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i+2,j));
+                    if(findPosition(i,j+2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j+2));
+                    if(findPosition(i,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j-2));
+                }
+                else if( j==0){
+                    if(findPosition(i+2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i+2,j));
+                    if(findPosition(i-2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2,j));
+                    if(findPosition(i,j+2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j+2));
+                }
+                else{
+                    if(findPosition(i,j+2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j+2));
+                    if(findPosition(i,j-2) != null)
+                        posArr[i][j].addNeighbour(findPosition(i,j-2));
+                    if(findPosition(i+2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i+2,j));
+                    if(findPosition(i-2,j) != null)
+                        posArr[i][j].addNeighbour(findPosition(i-2,j));
+                }
+            }
+        }
+    }
+
+
+
+
+    public Position findPosition(int x, int y){
+        try{
+            return posArr[x][y];
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            return null;
+        }
+    }
+
+
 
     @Override
     public String toString() {
-        String sout = "[";
+        String sout = "{\n";
         for (int i=0; i < mazeArr.length ; i++){
-            sout += "[";
+            sout += "{";
             for (int j=0; j<mazeArr[i].length;j++){
                 if (i==StartPosition.getRowIndex() && j==StartPosition.getColumnIndex()){
                     sout+="S";
@@ -127,10 +181,10 @@ public class Maze {
                     sout += mazeArr[i][j];
                 }
             }
-            sout +="]\n";
+            sout +="}\n";
 
         }
-        sout +="]";
+        sout +="}";
         return sout;
     }
 }

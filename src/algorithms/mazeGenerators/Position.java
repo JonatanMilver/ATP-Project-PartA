@@ -6,14 +6,14 @@ public class Position {
     private int row;
     private int column;
     private boolean visited;
-    private boolean iswall;
+    private boolean isWall;
     private ArrayList<Position> neighbours;
 
     public Position(int row, int column) {
         this.row = row;
         this.column = column;
         this.visited = false;
-        this.iswall = true;
+        this.isWall = true;
         this.neighbours = new ArrayList<Position>();
     }
 
@@ -26,13 +26,14 @@ public class Position {
     }
 
     public boolean getVisited(){ return this.visited; }
-    public boolean isIswall() {
-        return iswall;
+    public boolean isIsWall() {
+        return isWall;
     }
 
-    public void setIswall(boolean iswall) {
-        this.iswall = iswall;
+    public void setIsWall(boolean iswall) {
+        this.isWall = iswall;
     }
+    public boolean getIsWall(){return this.isWall;}
 
     public ArrayList<Position> getNeighbours() {
         return neighbours;
@@ -53,6 +54,18 @@ public class Position {
     public void setColumn(int column) {
         this.column = column;
     }
+
+    public void addNeighbour(Position otherPos){
+        if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()+2)
+            this.neighbours.add(otherPos);
+        else if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()-2)
+            this.neighbours.add(otherPos);
+        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()+2)
+            this.neighbours.add(otherPos);
+        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()-2)
+            this.neighbours.add(otherPos);
+    }
+
 
     @Override
     public String toString() {

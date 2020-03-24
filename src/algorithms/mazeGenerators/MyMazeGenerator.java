@@ -2,6 +2,8 @@ package algorithms.mazeGenerators;
 
 import javafx.geometry.Pos;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -9,61 +11,88 @@ public class MyMazeGenerator extends AMazeGenerator {
 
     @Override
     public Maze generate(int rows, int columns) {
-        Maze mymaze = new Maze(rows,columns,new Position(0,0),new Position(2*rows,2*columns));
+        Maze mymaze;
+        if(rows%2==0 && columns%2==0){
+            mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows-1,columns-2));
+        }
+        else {
+            mymaze = new Maze(rows, columns, new Position(0, 0), new Position(rows - 1, columns - 1));
+        }
         for (int i=0;i<mymaze.getRows();i++){
             for (int j=0; j<mymaze.getColumns();j++){
                 mymaze.getMazeArr()[i][j]=1;
             }
         }
 
-        Stack<Position> stack = new Stack<Position>();
-        stack.push(mymaze.getStartPosition());
+        Stack<Position> positionStack = new Stack<Position>();
+        positionStack.push(mymaze.getStartPosition());
 
-        while (!stack.empty()){
-            Position cur = stack.pop();
-            Position choosenNeighbour = new Position(0,0);
-            mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex()] = 0;
-            //System.out.println(mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex()]);
-            cur.setVisited(true);
-            boolean notAllVisited = false;
-            System.out.println(cur.getNeighbours().size());
-            System.out.println(mymaze.getPosarr().length);
-            for(int i=0; i<cur.getNeighbours().size();i++){
-                if(!cur.getNeighbours().get(i).getVisited())
-                    notAllVisited = true;
-            }
-            if(!notAllVisited)
-                continue;
-            while(notAllVisited){
-                int randomChoose = new Random().nextInt(cur.getNeighbours().size());
-                choosenNeighbour = cur.getNeighbours().get(randomChoose);
-                if(!choosenNeighbour.getVisited())
-                    break;
-            }
-            if(choosenNeighbour.getRowIndex() == cur.getRowIndex()){
-                if(choosenNeighbour.getColumnIndex() > cur.getColumnIndex()) {
-                    mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex() + 1] = 0;
-                    mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex() + 2] = 0;
-                }
-                else{
-                    mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex() - 1] = 0;
-                    mymaze.getMazeArr()[cur.getRowIndex()][cur.getColumnIndex() - 2] = 0;
+        while(!positionStack.isEmpty()){
+            Position current = positionStack.pop();
+            current.setVisited(true);
+            current.setIsWall(false);
+            ArrayList<Position> neighbours = new ArrayList<Position>();
+            for(int i=0;i<current.getNeighbours().size();i++){
+                if(!current.getNeighbours().get(i).isVisited()){
+                    neighbours.add(current.getNeighbours().get(i));
                 }
             }
-            else if(choosenNeighbour.getColumnIndex() == cur.getColumnIndex()){
-                if(choosenNeighbour.getRowIndex() > cur.getRowIndex()) {
-                    mymaze.getMazeArr()[cur.getRowIndex() + 1][cur.getColumnIndex()] = 0;
-                    mymaze.getMazeArr()[cur.getRowIndex() + 2][cur.getColumnIndex()] = 0;
+            Position between;
+
+            if(neighbours.size() != 0){
+                Random rand = new Random();
+                int randIndex = rand.nextInt(neighbours.size());
+                Position choosenNeighbour = neighbours.get(randIndex);
+                positionStack.push(current);
+                choosenNeighbour.setVisited(true);
+                choosenNeighbour.setIsWall(false);
+
+                if(choosenNeighbour.getRowIndex() == current.getRowIndex()) {
+                    if (choosenNeighbour.getColumnIndex() > current.getColumnIndex()) {
+                        between = mymaze.findPosition(current.getRowIndex(), current.getColumnIndex() + 1);
+                        if (between != null) {
+                            between.setVisited(true);
+                            between.setIsWall(false);
+                        }
+                    }
+                    else{
+                        between = mymaze.findPosition(current.getRowIndex(), current.getColumnIndex()-1);
+                        if(between!= null){
+                            between.setVisited(true);
+                            between.setIsWall(false);
+                        }
+                    }
                 }
-                else{
-                    mymaze.getMazeArr()[cur.getRowIndex() - 1][cur.getColumnIndex()] = 0;
-                    mymaze.getMazeArr()[cur.getRowIndex() - 2][cur.getColumnIndex()] = 0;
+                if(choosenNeighbour.getColumnIndex() == current.getColumnIndex()){
+                    if (choosenNeighbour.getRowIndex() > current.getRowIndex()) {
+                        between = mymaze.findPosition(current.getRowIndex()+1, current.getColumnIndex());
+                        if (between != null) {
+                            between.setVisited(true);
+                            between.setIsWall(false);
+                        }
+                    }
+                    else{
+                        between = mymaze.findPosition(current.getRowIndex()-1, current.getColumnIndex());
+                        if(between!= null){
+                            between.setVisited(true);
+                            between.setIsWall(false);
+                        }
+                    }
                 }
+                positionStack.push(choosenNeighbour);
             }
-            choosenNeighbour.setVisited(true);
-            stack.push(choosenNeighbour);
         }
-        return mymaze;
+        for(int i=0;i<mymaze.getRows();i++){
+            for(int j=0;j<mymaze.getColumns();j++){
+                if(!mymaze.getPosArr()[i][j].getIsWall())
+                    mymaze.getMazeArr()[i][j] = 0;
+            }
+        }
+
+    return mymaze;
+
+
 
     }
+
 }
