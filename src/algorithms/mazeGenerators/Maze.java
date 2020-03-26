@@ -13,31 +13,10 @@ public class Maze {
     public Maze(int rows, int columns , Position StartPosition,Position GoalPosition) {
         this.rows = rows;
         this.columns = columns;
-//        mazeArr = new int[rows+rows-1][columns+columns-1];
-//        posArr = new Position[rows][columns];
-        mazeArr = new int[rows][columns];
-
-        boolean is_rows_even = rows%2==0;
-        boolean is_columns_even = columns%2==0;
-        if (is_rows_even){
-            if (is_columns_even){
-                posArr = new Position[rows / 2][columns / 2];
-            }
-            else{
-                posArr = new Position[rows / 2][columns / 2 + 1];
-            }
-        }
-        else{
-            if (is_columns_even){
-                posArr = new Position[rows / 2 + 1][columns / 2];
-            }
-            else{
-                posArr = new Position[rows / 2 + 1][columns / 2 + 1];
-            }
-        }
-
-        buildPositions(posArr.length,posArr[0].length);
-        setNeighbours(posArr.length,posArr[0].length);
+        mazeArr = new int[rows+rows-1][columns+columns-1];
+        posArr = new Position[rows][columns];
+        buildPositions(rows,columns);
+        setNeighbours(rows, columns);
         this.StartPosition = posArr[StartPosition.getRowIndex()][StartPosition.getColumnIndex()];
         this.GoalPosition = posArr[GoalPosition.getRowIndex()][GoalPosition.getColumnIndex()];
 

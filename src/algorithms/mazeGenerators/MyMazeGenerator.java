@@ -10,25 +10,13 @@ public class MyMazeGenerator extends AMazeGenerator {
 
     @Override
     public Maze generate(int rows, int columns) {
-        boolean is_rows_even = rows%2==0;
-        boolean is_columns_even = columns%2==0;
-        Maze mymaze;
-        if (is_rows_even){
-            if (is_columns_even){
-                mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows/2,columns/2));
-            }
-            else{
-                mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows/2,columns/2+1));
-            }
-        }
-        else{
-            if (is_columns_even){
-                mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows/2+1,columns/2));
-            }
-            else{
-                mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows/2+1,columns/2+1));
-            }
-        }
+        Maze mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows-1,columns-1));
+//        if(rows%2==0 && columns%2==0){
+//            mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows-1,columns-2));
+//        }
+//        else {
+//            mymaze = new Maze(rows, columns, new Position(0, 0), new Position(rows - 1, columns - 1));
+//        }
         for (int i=0;i<2*mymaze.getRows()-1;i++){
             for (int j=0; j<2*mymaze.getColumns()-1;j++){
                 mymaze.getMazeArr()[i][j]=1;
@@ -95,6 +83,7 @@ public class MyMazeGenerator extends AMazeGenerator {
                 positionStack.push(choosenNeighbour);
             }
         }
+
         for(int i=0;i<mymaze.getRows();i++){
             for(int j=0;j<mymaze.getColumns();j++){
                 for (int k=0;k<mymaze.getPosArr()[i][j].getMovable_neighbours().size();k++){
