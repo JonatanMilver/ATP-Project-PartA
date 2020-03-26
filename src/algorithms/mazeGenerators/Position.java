@@ -8,6 +8,15 @@ public class Position {
     private boolean visited;
     private boolean isWall;
     private ArrayList<Position> neighbours;
+    private ArrayList<Position> movable_neighbours;
+
+    public ArrayList<Position> getMovable_neighbours() {
+        return movable_neighbours;
+    }
+
+    public void setMovable_neighbours(ArrayList<Position> movable_neighbours) {
+        this.movable_neighbours = movable_neighbours;
+    }
 
     public Position(int row, int column) {
         this.row = row;
@@ -15,6 +24,7 @@ public class Position {
         this.visited = false;
         this.isWall = true;
         this.neighbours = new ArrayList<Position>();
+        this.movable_neighbours = new ArrayList<>();
     }
 
     public boolean isVisited() {
@@ -56,13 +66,13 @@ public class Position {
     }
 
     public void addNeighbour(Position otherPos){
-        if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()+2)
+        if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()+1)
             this.neighbours.add(otherPos);
-        else if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()-2)
+        else if(otherPos.getRowIndex() == this.getRowIndex() && otherPos.getColumnIndex() == this.getColumnIndex()-1)
             this.neighbours.add(otherPos);
-        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()+2)
+        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()+1)
             this.neighbours.add(otherPos);
-        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()-2)
+        else if(otherPos.getColumnIndex() == this.getColumnIndex() && otherPos.getRowIndex() == this.getRowIndex()-1)
             this.neighbours.add(otherPos);
     }
 
