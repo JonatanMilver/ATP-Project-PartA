@@ -161,17 +161,15 @@ public class Maze {
     }
 
     public void print() {
-        for (int i=0; i < mazeArr.length ; i++){
-            for (int j=0; j<mazeArr[i].length;j++){
-                if (i==StartPosition.getRowIndex() && j==StartPosition.getColumnIndex()){
+        for(int i=0;i<mazeArr.length;i++){
+            for(int j=0;j<mazeArr[i].length;j++){
+                if(i==StartPosition.getRowIndex() && j == StartPosition.getColumnIndex()){
                     System.out.print("S");
                 }
-                else if (i==2*GoalPosition.getRowIndex() && j==2*GoalPosition.getColumnIndex()){
+                else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex())
                     System.out.print("E");
-                }
-                else{
-                    System.out.print(String.format("%d",mazeArr[i][j]));
-                }
+                else
+                    System.out.print(String.format("%d" , mazeArr[i][j]));
             }
             System.out.println();
         }
