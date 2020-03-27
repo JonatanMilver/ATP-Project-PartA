@@ -13,11 +13,12 @@ public class SimpleMazeGenerator extends AMazeGenerator {
 
         Maze ret = new Maze(rows , columns,start,end);
 
-        int[][] randMaze = new int[rows][columns];
-        for (int i = 0 ; i < rows ; i++){
-            for (int j = 0 ; j < columns ; j++){
+        int[][] randMaze = new int[2*rows-1][2*columns-1];
+        for (int i = 0 ; i < 2*rows-1 ; i++){
+            for (int j = 0 ; j < 2*columns-1 ; j++){
                 Random wall = new Random();
-                randMaze[i][j] = wall.nextInt(2);
+                if(i!=0 && i!= randMaze.length-1 && j!=0 && j!=randMaze[0].length-1)
+                    randMaze[i][j] = wall.nextInt(2);
             }
         }
         ret.setMazeArr(randMaze);
