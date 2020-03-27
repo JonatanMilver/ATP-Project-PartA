@@ -8,6 +8,14 @@ public abstract class AState {
     private double cost;
     private AState cameFrom;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public AState(String name) {
         this.name = name;
     }

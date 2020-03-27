@@ -1,6 +1,7 @@
 package algorithms.search;
 
 import algorithms.mazeGenerators.Maze;
+import algorithms.mazeGenerators.Position;
 
 import java.util.ArrayList;
 
@@ -9,23 +10,67 @@ public class SearchableMaze implements ISearchable {
     Maze maze;
     MazeState StartState;
     MazeState GoalState;
-//    MazeState[][] statesArray;
+    MazeState[][] mazeStates;
     public SearchableMaze(Maze maze) {
         this.maze = maze;
-        this.StartState = new MazeState(maze.getStartPosition(),"Start");
-        this.GoalState = new MazeState(maze.getGoalPosition(),"End");
+        mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
         buildMazeStates();
+        set_neighbouring_states();
+        this.StartState = mazeStates[0][0];
+        this.StartState.setName("Start");
+        this.GoalState = mazeStates[mazeStates.length-1][mazeStates[0].length-1];
+        this.GoalState.setName("End");
     }
 
     private void buildMazeStates() {
-        
-        for (int i=0;i<this.StartState.current_position.getMovable_neighbours().size();i++){
-            String name = Integer.toString(i+1);
-            MazeState new_state = new MazeState(this.StartState.current_position.getMovable_neighbours().get(i),name);
-            this.StartState.moveable_states.add(new_state);
-            new_state.moveable_states.add(StartState);
+
+        for (int i=0 ; i < mazeStates.length ; i++){
+            for (int j=0 ; j < mazeStates[0].length ; j++){
+                mazeStates[i][j] = new MazeState(maze.getPosArr()[i][j],maze.getPosArr()[i][j].toString());
+            }
         }
 
+        for (int i=0 ; i < mazeStates.length ; i++){
+            for (int j=0 ; j < mazeStates[0].length ; j++){
+                for (int k = 0 ; k < mazeStates[i][j].getCurrent_position().getMovable_neighbours().size(); k++){
+                    Position moveable_neighbour = mazeStates[i][j].getCurrent_position().getMovable_neighbours().get(k);
+                    int row_index = moveable_neighbour.getRowIndex();
+                    int col_index = moveable_neighbour.getColumnIndex();
+                    mazeStates[i][j].getMoveable_states().add(mazeStates[row_index][col_index]);
+                }
+            }
+        }
+
+    }
+
+    private void set_neighbouring_states(){
+        for (int i=0 ; i < mazeStates.length ; i++){
+            for (int j=0 ; j < mazeStates[0].length ; j++){
+                int cur_state_row = mazeStates[i][j].getCurrent_position().getRowIndex();
+                int cur_state_col = mazeStates[i][j].getCurrent_position().getColumnIndex();
+                for (int k = 0 ; k < mazeStates[i][j].getCurrent_position().getMovable_neighbours().size(); k++) {
+                    int neighbour_state_row = mazeStates[i][j].getCurrent_position().getMovable_neighbours().get(k).getRowIndex();
+                    int neighbour_state_col = mazeStates[i][j].getCurrent_position().getMovable_neighbours().get(k).getColumnIndex();
+                    if (cur_state_row==neighbour_state_row){
+                        if (cur_state_col < neighbour_state_col){
+                            mazeStates[i][j].setRight_state(mazeStates[neighbour_state_row][neighbour_state_col]);
+                        }
+                        else {
+                            mazeStates[i][j].setLeft_state(mazeStates[neighbour_state_row][neighbour_state_col]);
+                        }
+                    }
+                    else {
+                        if (cur_state_row < neighbour_state_row){
+                            mazeStates[i][j].setDown_state(mazeStates[neighbour_state_row][neighbour_state_col]);
+                        }
+                        else {
+                            mazeStates[i][j].setUp_state(mazeStates[neighbour_state_row][neighbour_state_col]);
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     @Override
