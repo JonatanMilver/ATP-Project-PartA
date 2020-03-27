@@ -6,7 +6,6 @@ public class Position {
     private int row;
     private int column;
     private boolean visited;
-    private boolean isWall;
     private ArrayList<Position> neighbours;
     private ArrayList<Position> movable_neighbours;
 
@@ -22,7 +21,6 @@ public class Position {
         this.row = row;
         this.column = column;
         this.visited = false;
-        this.isWall = true;
         this.neighbours = new ArrayList<Position>();
         this.movable_neighbours = new ArrayList<>();
     }
@@ -36,14 +34,8 @@ public class Position {
     }
 
     public boolean getVisited(){ return this.visited; }
-    public boolean isIsWall() {
-        return isWall;
-    }
 
-    public void setIsWall(boolean iswall) {
-        this.isWall = iswall;
-    }
-    public boolean getIsWall(){return this.isWall;}
+
 
     public ArrayList<Position> getNeighbours() {
         return neighbours;
