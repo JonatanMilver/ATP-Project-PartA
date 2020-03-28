@@ -163,7 +163,7 @@ public class Maze {
     public void print() {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
-                if(i==StartPosition.getRowIndex() && j == StartPosition.getColumnIndex()){
+                if(i==2*StartPosition.getRowIndex() && j == 2*StartPosition.getColumnIndex()){
                     System.out.print("S");
                 }
                 else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex())

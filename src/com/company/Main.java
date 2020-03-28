@@ -18,6 +18,8 @@ public class Main {
         Solution sol = search.solve(a);
         sol.print();
         System.out.println(search.getNumberOfNodesEvaluated());
+        System.out.println(mazz.getStartPosition().getMovable_neighbours());
+        System.out.println(mazz.getGoalPosition());
 
 
 //        System.out.println(s.measureAlgorithmTimeMillis(1000,1000));
