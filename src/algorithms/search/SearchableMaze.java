@@ -85,8 +85,38 @@ public class SearchableMaze implements ISearchable {
 
     public ArrayList<AState> getAllPossibleStates(AState cur_state){
         ArrayList<AState> p_states = new ArrayList<>();
+        if(cur_state.getUp_state() != null) {
+            p_states.add(cur_state.getUp_state());
+            if(cur_state.getUp_state().getLeft_state() != null){
+                p_states.add(cur_state.getUp_state().getLeft_state());
+            }
+            if(cur_state.getUp_state().getRight_state() != null)
+                p_states.add(cur_state.getUp_state().getRight_state());
+        }
+        if(cur_state.getDown_state() != null) {
+            p_states.add(cur_state.getDown_state());
+            if(cur_state.getDown_state().getLeft_state() != null){
+                p_states.add(cur_state.getDown_state().getLeft_state());
+            }
+            if(cur_state.getDown_state().getRight_state() != null)
+                p_states.add(cur_state.getDown_state().getRight_state());
+        }
+        if(cur_state.getRight_state() != null) {
+            p_states.add(cur_state.getRight_state());
+            if(cur_state.getRight_state().getUp_state() != null)
+                p_states.add(cur_state.getRight_state().getUp_state());
+            if(cur_state.getRight_state().getDown_state() != null)
+                p_states.add(cur_state.getRight_state().getDown_state());
+        }
+        if(cur_state.getLeft_state() != null) {
+            p_states.add(cur_state.getLeft_state());
+            if(cur_state.getLeft_state().getUp_state() != null)
+                p_states.add(cur_state.getLeft_state().getUp_state());
+            if(cur_state.getLeft_state().getDown_state() != null)
+                p_states.add(cur_state.getLeft_state().getDown_state());
+        }
 
-        return null;
+        return p_states;
     }
 
 }

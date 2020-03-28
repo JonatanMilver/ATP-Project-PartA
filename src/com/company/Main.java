@@ -1,8 +1,9 @@
 package com.company;
 
 import algorithms.mazeGenerators.*;
-import algorithms.search.ISearchable;
-import algorithms.search.SearchableMaze;
+import algorithms.search.*;
+
+import java.util.ArrayList;
 
 public class Main {
 
@@ -11,6 +12,12 @@ public class Main {
         Maze mazz = s.generate(5,10);
         mazz.print();
         ISearchable a = new SearchableMaze(mazz);
+        AState k = a.getStartState().getDown_state();
+        //ISearchingAlgorithm search = new BreadthFirstSearch("BFS");
+        ISearchingAlgorithm search = new DepthFirstSearch("DFS");
+        Solution sol = search.solve(a);
+        sol.print();
+        System.out.println(search.getNumberOfNodesEvaluated());
 
 
 //        System.out.println(s.measureAlgorithmTimeMillis(1000,1000));

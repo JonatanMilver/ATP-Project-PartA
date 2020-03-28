@@ -10,7 +10,7 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
         this.visitedNode = 0;
     }
 
-    public String getAlgo_name() {
+    public String getName() {
         return algo_name;
     }
 
@@ -18,4 +18,11 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
         return visitedNode;
     }
 
+    public void setVisitedNode(int visitedNode) {
+        this.visitedNode = visitedNode;
+    }
+
+    public void increaseVisited(){
+        this.visitedNode++;
+    }
 }

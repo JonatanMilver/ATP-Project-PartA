@@ -10,7 +10,13 @@ public class MyMazeGenerator extends AMazeGenerator {
 
     @Override
     public Maze generate(int rows, int columns) {
+        Random randGen = new Random();
+        int endRow, endCol;
+        int startRow = randGen.nextInt(4);
+        int startCol = randGen.nextInt(columns);
+        if(startRow == 0 && startCol == 0){
 
+        }
         //generating new maze with start position in index (0,0) and goal position in index (r-1,c-1)
         Maze mymaze = new Maze(rows,columns,new Position(0,0),new Position(rows-1,columns-1));
 
