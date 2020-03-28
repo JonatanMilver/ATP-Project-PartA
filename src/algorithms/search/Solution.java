@@ -22,7 +22,7 @@ public class Solution {
 
     public void print() {
         for(int i=0;i<SolutionPath.size();i++){
-            System.out.println(String.format(" %s",SolutionPath.get(i).getName()));
+            System.out.print(String.format(" %s",SolutionPath.get(i).getName()));
         }
     }
 }

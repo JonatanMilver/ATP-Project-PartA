@@ -30,7 +30,7 @@ public class MyMazeGenerator extends AMazeGenerator {
     private void DFS_algorithm(Stack<Position> positionStack, Maze mymaze){
 
         //pushing to the stack the start position of the maze
-        positionStack.push(mymaze.getStartPosition());
+        positionStack.push(mymaze.getPosArr()[0][0]);
 
         while(!positionStack.isEmpty()){
             Position current = positionStack.pop();
@@ -133,7 +133,7 @@ public class MyMazeGenerator extends AMazeGenerator {
                     }
                     else { //end_edge == 1
                         end_pos = randgen.nextInt(columns-1)+1;
-                        end = new Position(rows-1 , end_pos);
+                        end = new Position(0 , end_pos);
                     }
                 }
 
@@ -246,7 +246,7 @@ public class MyMazeGenerator extends AMazeGenerator {
                     start = new Position(start_pos,0);
                     end_edge = randgen.nextInt(2); // 0 - right , 1 - up
                     if (end_edge == 0){
-                        end_pos = randgen.nextInt(rows-1)+1;
+                        end_pos = randgen.nextInt(rows-1);
                         end = new Position(end_pos,columns-1);
                     }
                     else{

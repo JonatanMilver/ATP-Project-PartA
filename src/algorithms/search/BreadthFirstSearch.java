@@ -9,10 +9,6 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
         super(algo_name);
     }
 
-//    public void increaseVisited(){
-//        setVisitedNode(getVisitedNode()+1);
-//    }
-
     @Override
     public Solution solve(ISearchable domain) {
         Solution sol = new Solution();
