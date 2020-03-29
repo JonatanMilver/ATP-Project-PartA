@@ -24,5 +24,6 @@ public class Solution {
         for(int i=0;i<SolutionPath.size();i++){
             System.out.print(String.format(" %s",SolutionPath.get(i).getName()));
         }
+        System.out.println();
     }
 }

@@ -86,7 +86,7 @@ public class SearchableMaze implements ISearchable {
     public ArrayList<AState> getAllPossibleStates(AState cur_state){
         ArrayList<AState> p_states = new ArrayList<>();
         if(cur_state.getUp_state() != null) {
-            p_states.add(cur_state.getUp_state());
+
             if (cur_state.getUp_state().getCost()==0 && !cur_state.getUp_state().equals(this.StartState))
                 cur_state.getUp_state().setCost(10+cur_state.getCost());
 
@@ -102,29 +102,10 @@ public class SearchableMaze implements ISearchable {
                     cur_state.getUp_state().getRight_state().setCost(15+cur_state.getCost());
                 }
             }
+            p_states.add(cur_state.getUp_state());
         }
-
-        if(cur_state.getDown_state() != null) {
-            p_states.add(cur_state.getDown_state());
-            if (cur_state.getDown_state().getCost()==0 && !cur_state.getDown_state().equals(this.StartState))
-                cur_state.getDown_state().setCost(10+cur_state.getCost());
-
-            if(cur_state.getDown_state().getLeft_state() != null){
-                p_states.add(cur_state.getDown_state().getLeft_state());
-                if (cur_state.getDown_state().getLeft_state().getCost()==0 && !cur_state.getDown_state().getLeft_state().equals(this.StartState)) {
-                    cur_state.getDown_state().getLeft_state().setCost(15 + cur_state.getCost());
-                }
-            }
-            if(cur_state.getDown_state().getRight_state() != null) {
-                p_states.add(cur_state.getDown_state().getRight_state());
-                if (cur_state.getDown_state().getRight_state().getCost()==0 && !cur_state.getDown_state().getRight_state().equals(this.StartState)){
-                    cur_state.getDown_state().getRight_state().setCost(15+cur_state.getCost());
-                }
-            }
-        }
-
         if(cur_state.getRight_state() != null) {
-            p_states.add(cur_state.getRight_state());
+
             if (cur_state.getRight_state().getCost()==0 && !cur_state.getRight_state().equals(this.StartState)){
                 cur_state.getRight_state().setCost(10+cur_state.getCost());
             }
@@ -140,10 +121,33 @@ public class SearchableMaze implements ISearchable {
                     cur_state.getRight_state().getDown_state().setCost(15+cur_state.getCost());
                 }
             }
+            p_states.add(cur_state.getRight_state());
         }
 
+        if(cur_state.getDown_state() != null) {
+
+            if (cur_state.getDown_state().getCost()==0 && !cur_state.getDown_state().equals(this.StartState))
+                cur_state.getDown_state().setCost(10+cur_state.getCost());
+
+            if(cur_state.getDown_state().getLeft_state() != null){
+                p_states.add(cur_state.getDown_state().getLeft_state());
+                if (cur_state.getDown_state().getLeft_state().getCost()==0 && !cur_state.getDown_state().getLeft_state().equals(this.StartState)) {
+                    cur_state.getDown_state().getLeft_state().setCost(15 + cur_state.getCost());
+                }
+            }
+            if(cur_state.getDown_state().getRight_state() != null) {
+                p_states.add(cur_state.getDown_state().getRight_state());
+                if (cur_state.getDown_state().getRight_state().getCost()==0 && !cur_state.getDown_state().getRight_state().equals(this.StartState)){
+                    cur_state.getDown_state().getRight_state().setCost(15+cur_state.getCost());
+                }
+            }
+            p_states.add(cur_state.getDown_state());
+        }
+
+
+
         if(cur_state.getLeft_state() != null) {
-            p_states.add(cur_state.getLeft_state());
+
             if (cur_state.getLeft_state().getCost()==0 && !cur_state.getLeft_state().equals(this.StartState)){
                 cur_state.getLeft_state().setCost(10+cur_state.getCost());
             }
@@ -159,6 +163,7 @@ public class SearchableMaze implements ISearchable {
                     cur_state.getLeft_state().getDown_state().setCost(15+cur_state.getCost());
                 }
             }
+            p_states.add(cur_state.getLeft_state());
         }
 
         return p_states;

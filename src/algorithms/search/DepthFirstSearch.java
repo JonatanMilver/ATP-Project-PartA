@@ -1,6 +1,7 @@
 package algorithms.search;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class DepthFirstSearch extends ASearchingAlgorithm {
@@ -11,6 +12,7 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
     @Override
     public Solution solve(ISearchable domain) {
         Solution sol = new Solution();
+        LinkedList<AState> visitedTrack = new LinkedList<>();
         Stack<AState> stack = new Stack<>();
         stack.push(domain.getStartState());
 
@@ -23,10 +25,13 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
                     backTracker = backTracker.getCameFrom();
                 }
                 sol.reversePath();
+                for(int i=0;i<visitedTrack.size();i++)
+                    visitedTrack.get(i).setVisited(false);
                 return sol;
             }
             if(!cur.isVisited()){
                 cur.setVisited(true);
+                visitedTrack.add(cur);
                 ArrayList<AState> possibleNeighbours = domain.getAllPossibleStates(cur);
                 for(int i=0;i<possibleNeighbours.size();i++){
                     stack.push(possibleNeighbours.get(i));

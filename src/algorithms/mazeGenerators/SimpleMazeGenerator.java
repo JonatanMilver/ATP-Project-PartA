@@ -1,5 +1,6 @@
 package algorithms.mazeGenerators;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SimpleMazeGenerator extends AMazeGenerator {
@@ -12,6 +13,13 @@ public class SimpleMazeGenerator extends AMazeGenerator {
         Position end = new Position(rows-1,columns-1);
 
         Maze ret = new Maze(rows , columns,start,end);
+
+        for(int j=0;j<ret.getPosArr()[0].length-1;j++){
+            ret.getPosArr()[0][j].getMovable_neighbours().add(ret.getPosArr()[0][j+1]);
+        }
+        for(int i=0; i<ret.getPosArr().length-1;i++){
+            ret.getPosArr()[i][columns-1].getMovable_neighbours().add(ret.getPosArr()[i+1][columns-1]);
+        }
 
         int[][] randMaze = new int[2*rows-1][2*columns-1];
         for (int i = 0 ; i < 2*rows-1 ; i++){

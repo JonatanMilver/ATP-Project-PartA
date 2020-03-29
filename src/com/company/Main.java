@@ -10,35 +10,27 @@ public class Main {
 
     public static void main(String[] args) {
         AMazeGenerator s = new MyMazeGenerator();
+        AMazeGenerator simple = new SimpleMazeGenerator();
+        AMazeGenerator empty = new EmptyMazeGenerator();
         Maze mazz = null;
-//        for (int i = 1; i < 100; i++) {
-//            for (int j = 1; j < 100; j++) {
-//                mazz = s.generate(i,j);
-//                //mazz.print();
-//                ISearchable a = new SearchableMaze(mazz);
-//                ISearchingAlgorithm search = new BreadthFirstSearch("BFS");
-//                Solution sol = search.solve(a);
-//                System.out.println(mazz.getStartPosition());
-//                System.out.println(mazz.getGoalPosition());
-//                sol.print();
-//            }
-//        }
-        mazz = s.generate(5,10);
+        //mazz = s.generate(5,10);
+        mazz = empty.generate(5,10);
         mazz.print();
         ISearchable a = new SearchableMaze(mazz);
-//        a.getAllPossibleStates(a.getStartState());
-//        ISearchingAlgorithm search = new BreadthFirstSearch("BFS");
-        ISearchingAlgorithm search3 = new BestFirstSearch("Best_FS");
-//        ISearchingAlgorithm search2 = new DepthFirstSearch("DFS");
-        Solution sol = search3.solve(a);
-//        Solution sol2 = search2.solve(a);
+        ISearchingAlgorithm bfs = new BreadthFirstSearch("BFS");
+        ISearchingAlgorithm best = new BestFirstSearch("Best_FS");
+//        ISearchingAlgorithm dfs = new DepthFirstSearch("DFS");
+        Solution bfsSol = bfs.solve(a);
+        Solution bestSol = best.solve(a);
+//        Solution dfsSol = dfs.solve(a);
         System.out.println(mazz.getStartPosition());
         System.out.println(mazz.getGoalPosition());
-        sol.print();
+        System.out.println("BFS");
+        bfsSol.print();
+        System.out.println("BEST");
+        bestSol.print();
+//        System.out.println("DFS");
+//        dfsSol.print();
 
-//        sol2.print();
-
-
-//        System.out.println(s.measureAlgorithmTimeMillis(1000,1000));
     }
 }
