@@ -5,10 +5,11 @@ import java.util.Queue;
 
 public class BreadthFirstSearch extends ASearchingAlgorithm {
 
-     private Queue<AState> queue;
+    private Queue<AState> queue;
+
     public BreadthFirstSearch(String algo_name) {
         super(algo_name);
-        queue = new LinkedList<AState>();
+        queue = new LinkedList<>();
     }
 
     public Queue<AState> getQueue() {
@@ -21,6 +22,8 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
     @Override
     public Solution solve(ISearchable domain) {
+
+
         Solution sol = new Solution();
         LinkedList<AState> visitedTracker = new LinkedList<>();
         queue.add(domain.getStartState());
@@ -36,8 +39,16 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
                     backTracker = backTracker.getCameFrom();
                 }
                 sol.reversePath();
-                for(int i=0;i<visitedTracker.size();i++)
+                double sol_cost = 0;
+                for (int i = 0; i<sol.getSolutionPath().size();i++){
+                    sol_cost += 1;
+                }
+                sol.setSolutionCost(sol_cost);
+                for(int i=0;i<visitedTracker.size();i++) {
                     visitedTracker.get(i).setVisited(false);
+                    visitedTracker.get(i).setCameFrom(null);
+                    visitedTracker.get(i).setCost(0);
+                }
                 return sol;
             }
             for(int i=0;i<domain.getAllPossibleStates(cur).size();i++){

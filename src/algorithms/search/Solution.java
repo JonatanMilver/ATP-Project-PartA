@@ -6,9 +6,11 @@ import java.util.Collections;
 public class Solution {
 
     private ArrayList<AState> SolutionPath;
+    private double solutionCost;
 
     public Solution() {
         SolutionPath = new ArrayList<AState>();
+        solutionCost = 0;
     }
 
     public ArrayList<AState> getSolutionPath(){
@@ -19,6 +21,13 @@ public class Solution {
         Collections.reverse(SolutionPath);
     }
 
+    public double getSolutionCost() {
+        return solutionCost;
+    }
+
+    public void setSolutionCost(double solutionCost) {
+        this.solutionCost = solutionCost;
+    }
 
     public void print() {
         for(int i=0;i<SolutionPath.size();i++){
