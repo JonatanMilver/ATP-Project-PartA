@@ -5,14 +5,16 @@ import java.util.Queue;
 
 public class BreadthFirstSearch extends ASearchingAlgorithm {
 
+    Queue<AState> queue;
     public BreadthFirstSearch(String algo_name) {
         super(algo_name);
+        queue = new LinkedList<AState>();
     }
 
     @Override
     public Solution solve(ISearchable domain) {
         Solution sol = new Solution();
-        LinkedList<AState> queue = new LinkedList<>();
+//        LinkedList<AState> queue = new LinkedList<>();
         queue.add(domain.getStartState());
         domain.getStartState().setVisited(true); //Starting from the first state
 
@@ -38,11 +40,6 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
         }
         return sol;
 
-    }
-
-    @Override
-    public int getNumberOfNodesEvaluated() {
-        return getVisitedNode();
     }
 
 }

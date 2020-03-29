@@ -11,10 +11,17 @@ public class MyMazeGenerator extends AMazeGenerator {
     @Override
     public Maze generate(int rows, int columns) {
 
-//        ArrayList<Position> startGoal = randomStartGoal(rows, columns);
-        ArrayList<Position> startGoal = totalyRandomStartGoal(rows, columns);
-        //generating new maze with start position in index (0,0) and goal position in index (r-1,c-1)
-        Maze mymaze = new Maze(rows,columns,startGoal.get(0),startGoal.get(1));
+        Maze mymaze;
+        if (rows == 1 || columns ==1){
+            //generating new maze with start position in index (0,0) and goal position in index (r-1,c-1)
+            mymaze = new Maze(rows, columns,new Position(0,0),new Position(rows-1,columns-1));
+        }
+        else{
+            //generating new maze with random start and goal positions
+            ArrayList<Position> startGoal = totalyRandomStartGoal(rows, columns);
+            mymaze = new Maze(rows,columns,startGoal.get(0),startGoal.get(1));
+        }
+
 
         //initiating a new stack
         Stack<Position> positionStack = new Stack<Position>();

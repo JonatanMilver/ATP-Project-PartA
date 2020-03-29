@@ -14,12 +14,8 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
         return algo_name;
     }
 
-    public int getVisitedNode() {
+    public int getNumberOfNodesEvaluated(){
         return visitedNode;
-    }
-
-    public void setVisitedNode(int visitedNode) {
-        this.visitedNode = visitedNode;
     }
 
     public void increaseVisited(){
