@@ -12,6 +12,7 @@ public abstract class AState {
     private AState left_state;
     private AState right_state;
     private boolean visited;
+    private AState predecessor;
 
     public String getName() {
         return name;
@@ -28,6 +29,7 @@ public abstract class AState {
         this.left_state=null;
         this.right_state=null;
         this.visited = false;
+        this.predecessor = null;
     }
 
     @Override
@@ -36,6 +38,13 @@ public abstract class AState {
         if (o == null || getClass() != o.getClass()) return false;
         AState aState = (AState) o;
         return Objects.equals(name, aState.name);
+    }
+
+    @Override
+    public String toString() {
+        return
+                  name
+                ;
     }
 
     public AState getUp_state() {
@@ -60,6 +69,14 @@ public abstract class AState {
 
     public void setDown_state(AState down_state) {
         this.down_state = down_state;
+    }
+
+    public AState getPredecessor() {
+        return predecessor;
+    }
+
+    public void setPredecessor(AState predecessor) {
+        this.predecessor = predecessor;
     }
 
     public AState getLeft_state() {

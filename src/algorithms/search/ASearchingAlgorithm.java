@@ -5,9 +5,13 @@ public abstract class ASearchingAlgorithm implements ISearchingAlgorithm {
     private String algo_name;
     private int visitedNode;
 
-    public ASearchingAlgorithm(String algo_name) {
-        this.algo_name = algo_name;
+    public ASearchingAlgorithm() {
         this.visitedNode = 0;
+    }
+
+
+    public void setAlgo_name(String algo_name) {
+        this.algo_name = algo_name;
     }
 
     public String getName() {

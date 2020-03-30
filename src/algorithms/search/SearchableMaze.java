@@ -92,12 +92,14 @@ public class SearchableMaze implements ISearchable {
 
             if(cur_state.getUp_state().getLeft_state() != null){
                 p_states.add(cur_state.getUp_state().getLeft_state());
+                cur_state.getUp_state().getLeft_state().setPredecessor(cur_state.getUp_state());
                 if (cur_state.getUp_state().getLeft_state().getCost()==0 && !cur_state.getUp_state().getLeft_state().equals(this.StartState)) {
                     cur_state.getUp_state().getLeft_state().setCost(15 + cur_state.getCost());
                 }
             }
             if(cur_state.getUp_state().getRight_state() != null) {
                 p_states.add(cur_state.getUp_state().getRight_state());
+                cur_state.getUp_state().getRight_state().setPredecessor(cur_state.getUp_state());
                 if (cur_state.getUp_state().getRight_state().getCost()==0 && !cur_state.getUp_state().getRight_state().equals(this.StartState)){
                     cur_state.getUp_state().getRight_state().setCost(15+cur_state.getCost());
                 }
@@ -111,12 +113,14 @@ public class SearchableMaze implements ISearchable {
             }
             if(cur_state.getRight_state().getUp_state() != null) {
                 p_states.add(cur_state.getRight_state().getUp_state());
+                cur_state.getRight_state().getUp_state().setPredecessor(cur_state.getRight_state());
                 if (cur_state.getRight_state().getUp_state().getCost()==0 && !cur_state.getRight_state().getUp_state().equals(this.StartState)){
                     cur_state.getRight_state().getUp_state().setCost(15+cur_state.getCost());
                 }
             }
             if(cur_state.getRight_state().getDown_state() != null) {
                 p_states.add(cur_state.getRight_state().getDown_state());
+                cur_state.getRight_state().getDown_state().setPredecessor(cur_state.getRight_state());
                 if (cur_state.getRight_state().getDown_state().getCost()==0 && !cur_state.getRight_state().getDown_state().equals(this.StartState)){
                     cur_state.getRight_state().getDown_state().setCost(15+cur_state.getCost());
                 }
@@ -131,12 +135,14 @@ public class SearchableMaze implements ISearchable {
 
             if(cur_state.getDown_state().getLeft_state() != null){
                 p_states.add(cur_state.getDown_state().getLeft_state());
+                cur_state.getDown_state().getLeft_state().setPredecessor(cur_state.getDown_state());
                 if (cur_state.getDown_state().getLeft_state().getCost()==0 && !cur_state.getDown_state().getLeft_state().equals(this.StartState)) {
                     cur_state.getDown_state().getLeft_state().setCost(15 + cur_state.getCost());
                 }
             }
             if(cur_state.getDown_state().getRight_state() != null) {
                 p_states.add(cur_state.getDown_state().getRight_state());
+                cur_state.getDown_state().getRight_state().setPredecessor(cur_state.getDown_state());
                 if (cur_state.getDown_state().getRight_state().getCost()==0 && !cur_state.getDown_state().getRight_state().equals(this.StartState)){
                     cur_state.getDown_state().getRight_state().setCost(15+cur_state.getCost());
                 }
@@ -153,12 +159,14 @@ public class SearchableMaze implements ISearchable {
             }
             if(cur_state.getLeft_state().getUp_state() != null) {
                 p_states.add(cur_state.getLeft_state().getUp_state());
+                cur_state.getLeft_state().getUp_state().setPredecessor(cur_state.getLeft_state());
                 if (cur_state.getLeft_state().getUp_state().getCost()==0 && !cur_state.getLeft_state().getUp_state().equals(this.StartState)){
                     cur_state.getLeft_state().getUp_state().setCost(15+cur_state.getCost());
                 }
             }
             if(cur_state.getLeft_state().getDown_state() != null) {
                 p_states.add(cur_state.getLeft_state().getDown_state());
+                cur_state.getLeft_state().getDown_state().setPredecessor(cur_state.getLeft_state());
                 if (cur_state.getLeft_state().getDown_state().getCost()==0 && !cur_state.getLeft_state().getDown_state().equals(this.StartState)){
                     cur_state.getLeft_state().getDown_state().setCost(15+cur_state.getCost());
                 }

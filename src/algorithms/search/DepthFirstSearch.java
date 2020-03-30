@@ -5,14 +5,15 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 public class DepthFirstSearch extends ASearchingAlgorithm {
-    public DepthFirstSearch(String algo_name) {
-        super(algo_name);
+    public DepthFirstSearch() {
+        super();
+        this.setAlgo_name("DFS");
     }
 
     @Override
     public Solution solve(ISearchable domain) {
         Solution sol = new Solution();
-        LinkedList<AState> visitedTrack = new LinkedList<>();
+        ArrayList<AState> visitedTrack = new ArrayList<>();
         Stack<AState> stack = new Stack<>();
         stack.push(domain.getStartState());
 
@@ -32,12 +33,17 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
             if(!cur.isVisited()){
                 cur.setVisited(true);
                 visitedTrack.add(cur);
+                if(cur.getPredecessor() != null){
+                    cur.getPredecessor().setVisited(true);
+                    visitedTrack.add(cur.getPredecessor());
+                }
                 ArrayList<AState> possibleNeighbours = domain.getAllPossibleStates(cur);
                 for(int i=0;i<possibleNeighbours.size();i++){
                     stack.push(possibleNeighbours.get(i));
                     increaseVisited();
-                    if(!possibleNeighbours.get(i).isVisited())
+                    if(!possibleNeighbours.get(i).isVisited()) {
                         possibleNeighbours.get(i).setCameFrom(cur);
+                    }
                 }
             }
         }

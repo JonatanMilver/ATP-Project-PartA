@@ -1,5 +1,6 @@
 package algorithms.search;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -7,8 +8,9 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
     private Queue<AState> queue;
 
-    public BreadthFirstSearch(String algo_name) {
-        super(algo_name);
+    public BreadthFirstSearch() {
+        super();
+        this.setAlgo_name("BFS");
         queue = new LinkedList<>();
     }
 
@@ -25,7 +27,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
 
         Solution sol = new Solution();
-        LinkedList<AState> visitedTracker = new LinkedList<>();
+        ArrayList<AState> visitedTracker = new ArrayList<>();
         queue.add(domain.getStartState());
         domain.getStartState().setVisited(true); //Starting from the first state
         visitedTracker.add(domain.getStartState());

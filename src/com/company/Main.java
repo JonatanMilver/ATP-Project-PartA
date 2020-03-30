@@ -27,9 +27,9 @@ public class Main {
         System.out.println();
 
         ISearchable a = new SearchableMaze(mazz);
-        ISearchingAlgorithm bfs = new BreadthFirstSearch("BFS");
-        ISearchingAlgorithm best = new BestFirstSearch("Best_FS");
-        ISearchingAlgorithm dfs = new DepthFirstSearch("DFS");
+        ISearchingAlgorithm bfs = new BreadthFirstSearch();
+        ISearchingAlgorithm best = new BestFirstSearch();
+        ISearchingAlgorithm dfs = new DepthFirstSearch();
 
         Solution bfsSol = bfs.solve(a);
         Solution bestSol = best.solve(a);
@@ -38,15 +38,15 @@ public class Main {
         System.out.println(mazz.getStartPosition());
         System.out.println(mazz.getGoalPosition());
 
-//        System.out.println("BFS");
-//        bfsSol.print();
+        System.out.println("BFS");
+        bfsSol.print();
 //        System.out.println("bfsSol size: "+bfsSol.getSolutionPath().size());
-//        System.out.println("sum bfs: "+bfsSol.getSolutionCost());
+//        System.out.println("nodes bfs: "+bfs.getNumberOfNodesEvaluated());
 //
-//        System.out.println("BEST");
-//        bestSol.print();
+        System.out.println("BEST");
+        bestSol.print();
 //        System.out.println("bestSol size: "+bestSol.getSolutionPath().size());
-//        System.out.println("sum best: "+bestSol.getSolutionCost());
+//        System.out.println("nodes best: "+best.getNumberOfNodesEvaluated());
 
 
         System.out.println("DFS");

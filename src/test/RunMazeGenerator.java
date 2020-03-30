@@ -3,7 +3,7 @@ package test;
 import algorithms.mazeGenerators.*;
 
 /**
- * Created by Aviadjo on 3/22/2017.
+ * Maze generator test by Yony and Guy.
  */
 public class RunMazeGenerator {
     public static void main(String[] args) {
