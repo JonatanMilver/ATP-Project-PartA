@@ -18,6 +18,8 @@ public class Position {
     }
 
     public Position(int row, int column) {
+        if(row<0 || column<0)
+            throw new ArithmeticException("A Position must be inside the maze.");
         this.row = row;
         this.column = column;
         this.visited = false;

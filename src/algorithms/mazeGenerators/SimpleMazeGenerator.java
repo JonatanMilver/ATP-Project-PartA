@@ -9,6 +9,8 @@ public class SimpleMazeGenerator extends AMazeGenerator {
 
     @Override
     public Maze generate(int rows, int columns) {
+        if(rows<0 || columns<0)
+            throw new ArithmeticException("Rows and columns must be non-negative.");
         Position start = new Position(0,0);
         Position end = new Position(rows-1,columns-1);
 

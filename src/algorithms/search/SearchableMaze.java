@@ -12,14 +12,21 @@ public class SearchableMaze implements ISearchable {
     MazeState GoalState;
     MazeState[][] mazeStates;
     public SearchableMaze(Maze maze) {
-        this.maze = maze;
-        mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
-        buildMazeStates();
-        set_neighbouring_states();
-        this.StartState = mazeStates[maze.getStartPosition().getRowIndex()][maze.getStartPosition().getColumnIndex()];
-        this.StartState.setName("Start");
-        this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
-        this.GoalState.setName("End");
+        try {
+            this.maze = maze;
+            mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
+            buildMazeStates();
+            set_neighbouring_states();
+            this.StartState = mazeStates[maze.getStartPosition().getRowIndex()][maze.getStartPosition().getColumnIndex()];
+            this.StartState.setName("Start");
+            this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
+            this.GoalState.setName("End");
+        }
+        catch(Exception e){};
+
+
+
+
     }
 
     private void buildMazeStates() {
@@ -84,6 +91,8 @@ public class SearchableMaze implements ISearchable {
     }
 
     public ArrayList<AState> getAllPossibleStates(AState cur_state){
+        if(cur_state == null)
+            return null;
         ArrayList<AState> p_states = new ArrayList<>();
         if(cur_state.getUp_state() != null) {
 

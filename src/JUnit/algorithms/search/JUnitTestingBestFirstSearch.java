@@ -1,46 +1,48 @@
 package algorithms.search;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import algorithms.mazeGenerators.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JUnitTestingBestFirstSearch {
+    private BestFirstSearch bestFS = new BestFirstSearch();
+    private AMazeGenerator myMaze = new MyMazeGenerator();
+    private AMazeGenerator simpleMaze = new SimpleMazeGenerator();
+    private AMazeGenerator empty = new EmptyMazeGenerator();
+    private Maze maze = myMaze.generate(5,10);
+    private Maze smallestMaze = myMaze.generate(1,1);
+    private Maze zeroMaze = myMaze.generate(0,0);
 
-    @BeforeEach
-    void setUp() {
-    }
 
-    @AfterEach
-    void tearDown() {
-    }
+    private ISearchable domain1 = new SearchableMaze(maze);
+    private ISearchable domain2 = new SearchableMaze(smallestMaze);
+    private ISearchable domain3 = new SearchableMaze(zeroMaze);
 
-    @Test
-    void getQueue() {
-    }
 
-    @Test
-    void setQueue() {
-    }
 
-    @Test
-    void solve() {
-    }
+
+
 
     @Test
-    void setAlgo_name() {
+    void solve() throws Exception {
+        assertNull(bestFS.solve(domain3));
+        assertEquals(domain2.getStartState(),domain2.getGoalState());
+        assertEquals(smallestMaze.getStartPosition(),smallestMaze.getGoalPosition());
     }
 
+
     @Test
-    void getName() {
+    void getName() throws Exception{
+        assertEquals(bestFS.getName(), "Best First Search");
     }
 
     @Test
     void getNumberOfNodesEvaluated() {
+
     }
 
-    @Test
-    void increaseVisited() {
-    }
+
+
+
 }

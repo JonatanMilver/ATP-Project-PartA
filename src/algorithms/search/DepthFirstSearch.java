@@ -2,6 +2,7 @@ package algorithms.search;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public class DepthFirstSearch extends ASearchingAlgorithm {
@@ -12,6 +13,8 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
 
     @Override
     public Solution solve(ISearchable domain) {
+        if(domain == null)
+            return null;
         Solution sol = new Solution();
         ArrayList<AState> visitedTrack = new ArrayList<>();
         Stack<AState> stack = new Stack<>();
