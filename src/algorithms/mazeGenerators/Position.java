@@ -2,6 +2,11 @@ package algorithms.mazeGenerators;
 
 import java.util.ArrayList;
 
+/**
+ * Position class that represents a position usings it's row and column.
+ * Holds an ArrayList of it's neighbours in order to make the maze.
+ * Holds an ArrayList of neighbours that it can reach to.
+ */
 public class Position {
     private int row;
     private int column;

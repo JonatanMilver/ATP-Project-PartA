@@ -2,6 +2,13 @@ package algorithms.mazeGenerators;
 
 import java.util.Arrays;
 
+/**
+ * A maze class.
+ * Holds maze's rows and columns.
+ * Holds it's Start position and goal position.
+ * mazeArr - int array for the maze's presentation
+ * posArr - Array of positions holding each position at it's place.
+ */
 public class Maze {
     private int rows;
     private int columns;

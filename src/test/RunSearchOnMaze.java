@@ -8,14 +8,13 @@ import algorithms.search.*;
 import java.util.ArrayList;
 
 /**
- * Seach algorithms test by Yony and Guy.
+ * Created by Aviadjo on 3/22/2017.
  */
 public class RunSearchOnMaze {
     public static void main(String[] args) {
         IMazeGenerator mg = new MyMazeGenerator();
         Maze maze = mg.generate(30, 30);
         SearchableMaze searchableMaze = new SearchableMaze(maze);
-
         solveProblem(searchableMaze, new BreadthFirstSearch());
         solveProblem(searchableMaze, new DepthFirstSearch());
         solveProblem(searchableMaze, new BestFirstSearch());

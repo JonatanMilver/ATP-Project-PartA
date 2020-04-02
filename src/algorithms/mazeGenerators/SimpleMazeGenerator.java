@@ -3,6 +3,10 @@ package algorithms.mazeGenerators;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * A generator that creates a maze placing walls randomly on that maze.
+ * The maze will always have a solution.
+ */
 public class SimpleMazeGenerator extends AMazeGenerator {
     public SimpleMazeGenerator() {
     }

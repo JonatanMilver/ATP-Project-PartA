@@ -1,5 +1,8 @@
 package algorithms.mazeGenerators;
 
+/**
+ * Generates an empty maze - without any walls.
+ */
 public class EmptyMazeGenerator extends AMazeGenerator {
 
     public EmptyMazeGenerator() {
