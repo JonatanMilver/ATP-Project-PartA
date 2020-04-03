@@ -51,7 +51,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
                     for (int i = 0; i < visitedTracker.size(); i++) {
                         visitedTracker.get(i).setVisited(false);
                         visitedTracker.get(i).setCameFrom(null);
-                        visitedTracker.get(i).setCost(0);
+//                        visitedTracker.get(i).setCost(0);
                     }
                     return sol;
                 }
