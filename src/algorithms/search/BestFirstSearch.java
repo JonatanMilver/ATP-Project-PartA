@@ -9,7 +9,8 @@ public class BestFirstSearch extends BreadthFirstSearch {
     public BestFirstSearch() {
         super();
         this.setAlgo_name("Best First Search");
-        queue = new PriorityQueue<>(new BestComparator());
+        queue = new PriorityQueue<AState>((x,y) -> (int)(x.getCost()-y.getCost()));
+//        queue = new PriorityQueue<AState>(new BestComparator());
     }
 }
 

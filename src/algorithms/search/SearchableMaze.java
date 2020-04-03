@@ -4,6 +4,8 @@ import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.Position;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class SearchableMaze implements ISearchable {
 
@@ -21,12 +23,46 @@ public class SearchableMaze implements ISearchable {
             this.StartState.setName("Start");
             this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
             this.GoalState.setName("End");
+            setCosts();
         }
-        catch(Exception e){};
+        catch(Exception ignored){};
 
 
 
 
+    }
+
+    private void setCosts() {
+        this.StartState.setCost(0);
+        Queue<AState> queue = new LinkedList<>();
+        queue.add(this.StartState);
+        while (!queue.isEmpty()){
+            AState current = queue.poll();
+            ArrayList<AState> possible_neighbours = getAllPossibleStates(current);
+            for (AState possible_neighbour : possible_neighbours) {
+                if (possible_neighbour == StartState)
+                    continue;
+                if (possible_neighbour.getCost() == Double.MAX_VALUE){
+                    queue.add(possible_neighbour);
+                }
+                ArrayList<AState> neighbour_possible_neighbours = getAllPossibleStates(possible_neighbour);
+                AState min = neighbour_possible_neighbours.get(0);
+                for ( AState a : neighbour_possible_neighbours){
+                    if (min.getCost()>a.getCost()){
+                        min = a;
+                    }
+                }
+                int x;
+                if (possible_neighbour.getUp_state() == min || possible_neighbour.getRight_state() == min ||
+                        possible_neighbour.getDown_state() == min || possible_neighbour.getLeft_state() == min)
+                    x = 10;
+                else
+                    x = 15;
+
+                possible_neighbour.setCost(x+min.getCost());
+
+            }
+        }
     }
 
     private void buildMazeStates() {
@@ -96,65 +132,65 @@ public class SearchableMaze implements ISearchable {
         ArrayList<AState> p_states = new ArrayList<>();
         if(cur_state.getUp_state() != null) {
 
-            if (cur_state.getUp_state().getCost()==0 && !cur_state.getUp_state().equals(this.StartState))
-                cur_state.getUp_state().setCost(10+cur_state.getCost());
+//            if (cur_state.getUp_state().getCost()==0 && !cur_state.getUp_state().equals(this.StartState))
+//                cur_state.getUp_state().setCost(10+cur_state.getCost());
 
             if(cur_state.getUp_state().getLeft_state() != null){
                 p_states.add(cur_state.getUp_state().getLeft_state());
                 cur_state.getUp_state().getLeft_state().setPredecessor(cur_state.getUp_state());
-                if (cur_state.getUp_state().getLeft_state().getCost()==0 && !cur_state.getUp_state().getLeft_state().equals(this.StartState)) {
-                    cur_state.getUp_state().getLeft_state().setCost(15 + cur_state.getCost());
-                }
+//                if (cur_state.getUp_state().getLeft_state().getCost()==0 && !cur_state.getUp_state().getLeft_state().equals(this.StartState)) {
+//                    cur_state.getUp_state().getLeft_state().setCost(15 + cur_state.getCost());
+//                }
             }
             if(cur_state.getUp_state().getRight_state() != null) {
                 p_states.add(cur_state.getUp_state().getRight_state());
                 cur_state.getUp_state().getRight_state().setPredecessor(cur_state.getUp_state());
-                if (cur_state.getUp_state().getRight_state().getCost()==0 && !cur_state.getUp_state().getRight_state().equals(this.StartState)){
-                    cur_state.getUp_state().getRight_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getUp_state().getRight_state().getCost()==0 && !cur_state.getUp_state().getRight_state().equals(this.StartState)){
+//                    cur_state.getUp_state().getRight_state().setCost(15+cur_state.getCost());
+//                }
             }
             p_states.add(cur_state.getUp_state());
         }
         if(cur_state.getRight_state() != null) {
 
-            if (cur_state.getRight_state().getCost()==0 && !cur_state.getRight_state().equals(this.StartState)){
-                cur_state.getRight_state().setCost(10+cur_state.getCost());
-            }
+//            if (cur_state.getRight_state().getCost()==0 && !cur_state.getRight_state().equals(this.StartState)){
+//                cur_state.getRight_state().setCost(10+cur_state.getCost());
+//            }
             if(cur_state.getRight_state().getUp_state() != null) {
                 p_states.add(cur_state.getRight_state().getUp_state());
                 cur_state.getRight_state().getUp_state().setPredecessor(cur_state.getRight_state());
-                if (cur_state.getRight_state().getUp_state().getCost()==0 && !cur_state.getRight_state().getUp_state().equals(this.StartState)){
-                    cur_state.getRight_state().getUp_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getRight_state().getUp_state().getCost()==0 && !cur_state.getRight_state().getUp_state().equals(this.StartState)){
+//                    cur_state.getRight_state().getUp_state().setCost(15+cur_state.getCost());
+//                }
             }
             if(cur_state.getRight_state().getDown_state() != null) {
                 p_states.add(cur_state.getRight_state().getDown_state());
                 cur_state.getRight_state().getDown_state().setPredecessor(cur_state.getRight_state());
-                if (cur_state.getRight_state().getDown_state().getCost()==0 && !cur_state.getRight_state().getDown_state().equals(this.StartState)){
-                    cur_state.getRight_state().getDown_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getRight_state().getDown_state().getCost()==0 && !cur_state.getRight_state().getDown_state().equals(this.StartState)){
+//                    cur_state.getRight_state().getDown_state().setCost(15+cur_state.getCost());
+//                }
             }
             p_states.add(cur_state.getRight_state());
         }
 
         if(cur_state.getDown_state() != null) {
 
-            if (cur_state.getDown_state().getCost()==0 && !cur_state.getDown_state().equals(this.StartState))
-                cur_state.getDown_state().setCost(10+cur_state.getCost());
+//            if (cur_state.getDown_state().getCost()==0 && !cur_state.getDown_state().equals(this.StartState))
+//                cur_state.getDown_state().setCost(10+cur_state.getCost());
 
             if(cur_state.getDown_state().getLeft_state() != null){
                 p_states.add(cur_state.getDown_state().getLeft_state());
                 cur_state.getDown_state().getLeft_state().setPredecessor(cur_state.getDown_state());
-                if (cur_state.getDown_state().getLeft_state().getCost()==0 && !cur_state.getDown_state().getLeft_state().equals(this.StartState)) {
-                    cur_state.getDown_state().getLeft_state().setCost(15 + cur_state.getCost());
-                }
+//                if (cur_state.getDown_state().getLeft_state().getCost()==0 && !cur_state.getDown_state().getLeft_state().equals(this.StartState)) {
+//                    cur_state.getDown_state().getLeft_state().setCost(15 + cur_state.getCost());
+//                }
             }
             if(cur_state.getDown_state().getRight_state() != null) {
                 p_states.add(cur_state.getDown_state().getRight_state());
                 cur_state.getDown_state().getRight_state().setPredecessor(cur_state.getDown_state());
-                if (cur_state.getDown_state().getRight_state().getCost()==0 && !cur_state.getDown_state().getRight_state().equals(this.StartState)){
-                    cur_state.getDown_state().getRight_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getDown_state().getRight_state().getCost()==0 && !cur_state.getDown_state().getRight_state().equals(this.StartState)){
+//                    cur_state.getDown_state().getRight_state().setCost(15+cur_state.getCost());
+//                }
             }
             p_states.add(cur_state.getDown_state());
         }
@@ -163,22 +199,22 @@ public class SearchableMaze implements ISearchable {
 
         if(cur_state.getLeft_state() != null) {
 
-            if (cur_state.getLeft_state().getCost()==0 && !cur_state.getLeft_state().equals(this.StartState)){
-                cur_state.getLeft_state().setCost(10+cur_state.getCost());
-            }
+//            if (cur_state.getLeft_state().getCost()==0 && !cur_state.getLeft_state().equals(this.StartState)){
+//                cur_state.getLeft_state().setCost(10+cur_state.getCost());
+//            }
             if(cur_state.getLeft_state().getUp_state() != null) {
                 p_states.add(cur_state.getLeft_state().getUp_state());
                 cur_state.getLeft_state().getUp_state().setPredecessor(cur_state.getLeft_state());
-                if (cur_state.getLeft_state().getUp_state().getCost()==0 && !cur_state.getLeft_state().getUp_state().equals(this.StartState)){
-                    cur_state.getLeft_state().getUp_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getLeft_state().getUp_state().getCost()==0 && !cur_state.getLeft_state().getUp_state().equals(this.StartState)){
+//                    cur_state.getLeft_state().getUp_state().setCost(15+cur_state.getCost());
+//                }
             }
             if(cur_state.getLeft_state().getDown_state() != null) {
                 p_states.add(cur_state.getLeft_state().getDown_state());
                 cur_state.getLeft_state().getDown_state().setPredecessor(cur_state.getLeft_state());
-                if (cur_state.getLeft_state().getDown_state().getCost()==0 && !cur_state.getLeft_state().getDown_state().equals(this.StartState)){
-                    cur_state.getLeft_state().getDown_state().setCost(15+cur_state.getCost());
-                }
+//                if (cur_state.getLeft_state().getDown_state().getCost()==0 && !cur_state.getLeft_state().getDown_state().equals(this.StartState)){
+//                    cur_state.getLeft_state().getDown_state().setCost(15+cur_state.getCost());
+//                }
             }
             p_states.add(cur_state.getLeft_state());
         }

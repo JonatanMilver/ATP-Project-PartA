@@ -55,6 +55,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
                     }
                     return sol;
                 }
+
                 for (int i = 0; i < domain.getAllPossibleStates(cur).size(); i++) {
                     if (!domain.getAllPossibleStates(cur).get(i).isVisited()) {
                         domain.getAllPossibleStates(cur).get(i).setVisited(true); //Setting neighbours as visited

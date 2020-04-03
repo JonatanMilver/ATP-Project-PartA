@@ -30,6 +30,7 @@ public abstract class AState {
         this.right_state=null;
         this.visited = false;
         this.predecessor = null;
+        this.setCost(Double.MAX_VALUE);
     }
 
     @Override
