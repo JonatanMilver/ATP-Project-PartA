@@ -1,8 +1,6 @@
 package algorithms.search;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Stack;
 
 public class DepthFirstSearch extends ASearchingAlgorithm {
@@ -29,23 +27,22 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
                     backTracker = backTracker.getCameFrom();
                 }
                 sol.reversePath();
-                for(int i=0;i<visitedTrack.size();i++)
-                    visitedTrack.get(i).setVisited(false);
+                for (AState aState : visitedTrack) aState.setVisited(false);
                 return sol;
             }
             if(!cur.isVisited()){
                 cur.setVisited(true);
                 visitedTrack.add(cur);
-                if(cur.getPredecessor() != null){
-                    cur.getPredecessor().setVisited(true);
-                    visitedTrack.add(cur.getPredecessor());
-                }
+//                if(cur.getPredecessor() != null){
+//                    cur.getPredecessor().setVisited(true);
+//                    visitedTrack.add(cur.getPredecessor());
+//                }
                 ArrayList<AState> possibleNeighbours = domain.getAllPossibleStates(cur);
-                for(int i=0;i<possibleNeighbours.size();i++){
-                    stack.push(possibleNeighbours.get(i));
+                for (AState possibleNeighbour : possibleNeighbours) {
+                    stack.push(possibleNeighbour);
                     increaseVisited();
-                    if(!possibleNeighbours.get(i).isVisited()) {
-                        possibleNeighbours.get(i).setCameFrom(cur);
+                    if (!possibleNeighbour.isVisited()) {
+                        possibleNeighbour.setCameFrom(cur);
                     }
                 }
             }

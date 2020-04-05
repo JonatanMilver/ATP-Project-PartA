@@ -43,15 +43,11 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
                         backTracker = backTracker.getCameFrom();
                     }
                     sol.reversePath();
-                    double sol_cost = 0;
-                    for (int i = 0; i < sol.getSolutionPath().size(); i++) {
-                        sol_cost += 1;
-                    }
+                    double sol_cost = sol.getSolutionPath().size();
                     sol.setSolutionCost(sol_cost);
-                    for (int i = 0; i < visitedTracker.size(); i++) {
-                        visitedTracker.get(i).setVisited(false);
-                        visitedTracker.get(i).setCameFrom(null);
-//                        visitedTracker.get(i).setCost(0);
+                    for (AState aState : visitedTracker) {
+                        aState.setVisited(false);
+                        aState.setCameFrom(null);
                     }
                     return sol;
                 }
@@ -69,6 +65,7 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
             return sol;
         }
         catch(Exception e){
+            System.out.println("BFS - Solve method Exception");
             return null;
         }
 

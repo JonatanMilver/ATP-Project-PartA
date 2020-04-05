@@ -1,7 +1,6 @@
 package algorithms.search;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class BestFirstSearch extends BreadthFirstSearch {
@@ -10,8 +9,8 @@ public class BestFirstSearch extends BreadthFirstSearch {
         super();
         this.setAlgo_name("Best First Search");
         queue = new PriorityQueue<AState>((x,y) -> (int)(x.getCost()-y.getCost()));
-//        queue = new PriorityQueue<AState>(new BestComparator());
     }
+
 }
 
 class BestComparator implements Comparator<AState> {
