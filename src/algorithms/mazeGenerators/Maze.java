@@ -1,5 +1,6 @@
 package algorithms.mazeGenerators;
 
+import javax.swing.*;
 import java.util.Arrays;
 
 /**
@@ -168,17 +169,39 @@ public class Maze {
     }
 
     public void print() {
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_BLACK = "\u001b[30m";
+        final String ANSI_RED = "\u001B[31m";
+        final String ANSI_GREEN = "\u001B[32m";
+        final String ANSI_WHITE = "\u001B[37m";
+        final String	BACKGROUND_BLACK	= "\u001B[40m";
+        final String	BACKGROUND_RED		= "\u001B[41m";
+        final String	BACKGROUND_GREEN	= "\u001B[42m";
+        final String	BACKGROUND_WHITE	= "\u001B[47m";
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
                 if(i==2*StartPosition.getRowIndex() && j == 2*StartPosition.getColumnIndex()){
-                    System.out.print("S");
+                    System.out.print(BACKGROUND_RED + ANSI_RED + "S"  + ANSI_RESET);
+//                    System.out.println(" S");
+
                 }
-                else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex())
-                    System.out.print("E");
-                else
-                    System.out.print(String.format("%d" , mazeArr[i][j]));
+                else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex()) {
+                    System.out.print(BACKGROUND_GREEN + ANSI_GREEN + "E" + ANSI_RESET);
+//                    System.out.println(" E");
+                }
+                else if(mazeArr[i][j] == 1) {
+                    System.out.print(BACKGROUND_WHITE + ANSI_WHITE + String.format("%d", mazeArr[i][j]) + ANSI_RESET);
+//                    System.out.println(String.format("%d", mazeArr[i][j]));
+                }
+                else if(mazeArr[i][j] == 0){
+                    System.out.print(BACKGROUND_BLACK + ANSI_BLACK + String.format("%d" , mazeArr[i][j]) + ANSI_RESET);
+//                    System.out.println(String.format("%d" , mazeArr[i][j]));
+                }
+
+
             }
-            System.out.println();
+            System.out.println("\u001b[107m");
+//            System.out.println();
         }
     }
 }
