@@ -3,13 +3,16 @@ package algorithms.search;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * A solution for a Searchable object
+ */
 public class Solution {
 
     private ArrayList<AState> SolutionPath;
     private double solutionCost;
 
     public Solution() {
-        SolutionPath = new ArrayList<AState>();
+        SolutionPath = new ArrayList<>();
         solutionCost = 0;
     }
 
@@ -30,8 +33,8 @@ public class Solution {
     }
 
     public void print() {
-        for(int i=0;i<SolutionPath.size();i++){
-            System.out.print(String.format(" %s",SolutionPath.get(i).getName()));
+        for (AState state : SolutionPath) {
+            System.out.print(String.format(" %s", state.getName()));
         }
         System.out.println();
     }

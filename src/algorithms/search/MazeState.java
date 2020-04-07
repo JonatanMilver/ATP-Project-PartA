@@ -3,6 +3,11 @@ import algorithms.mazeGenerators.Position;
 
 import java.util.ArrayList;
 
+/**
+ * A sub class of AState.
+ * implemented specifically for maze states,
+ * which can have four possible neighbours at all sides.
+ */
 public class MazeState extends AState {
 
     private Position current_position;
@@ -29,16 +34,8 @@ public class MazeState extends AState {
         return current_position;
     }
 
-    public void setCurrent_position(Position current_position) {
-        this.current_position = current_position;
-    }
-
     public ArrayList<MazeState> getMoveable_states() {
         return moveable_states;
-    }
-
-    public void setMoveable_states(ArrayList<MazeState> moveable_states) {
-        this.moveable_states = moveable_states;
     }
 
     public MazeState getUp_state() {

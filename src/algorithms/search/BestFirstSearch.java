@@ -1,29 +1,16 @@
 package algorithms.search;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/**
+ * A Best First Search algorithm implementation.
+ * Uses the BFS solve method but replaces the Linked List Queue with a Priority Queue.
+ */
 public class BestFirstSearch extends BreadthFirstSearch {
 
     public BestFirstSearch() {
         super();
         this.setAlgo_name("Best First Search");
-        queue = new PriorityQueue<AState>((x,y) -> (int)(x.getCost()-y.getCost()));
-    }
-
-}
-
-class BestComparator implements Comparator<AState> {
-    @Override
-    public int compare(AState o1, AState o2) {
-        if (o1.getCost() > o2.getCost()){
-            return 1;
-        }
-        else if (o1.getCost() < o2.getCost()){
-            return -1;
-        }
-        else {
-            return 0;
-        }
+        queue = new PriorityQueue<>((x,y) -> (int)(x.getCost()-y.getCost()));
     }
 }

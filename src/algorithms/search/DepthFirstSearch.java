@@ -3,6 +3,9 @@ package algorithms.search;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * A Depth First Search algorithm implementation.
+ */
 public class DepthFirstSearch extends ASearchingAlgorithm {
     public DepthFirstSearch() {
         super();
@@ -21,22 +24,21 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
         while(!stack.isEmpty()){
             AState cur = stack.pop();
             if(cur.equals(domain.getGoalState())){
-                AState backTracker = cur;
-                while(backTracker != null){
-                    sol.getSolutionPath().add(backTracker);
-                    backTracker = backTracker.getCameFrom();
-                }
-                sol.reversePath();
-                for (AState aState : visitedTrack) aState.setVisited(false);
+                sol = buildSolution(cur);
+                resetDomain(visitedTrack);
+//                AState backTracker = cur;
+//                while(backTracker != null){
+//                    sol.getSolutionPath().add(backTracker);
+//                    backTracker = backTracker.getCameFrom();
+//                }
+//                sol.reversePath();
+//                for (AState aState : visitedTrack) aState.setVisited(false);
                 return sol;
             }
             if(!cur.isVisited()){
                 cur.setVisited(true);
                 visitedTrack.add(cur);
-//                if(cur.getPredecessor() != null){
-//                    cur.getPredecessor().setVisited(true);
-//                    visitedTrack.add(cur.getPredecessor());
-//                }
+
                 ArrayList<AState> possibleNeighbours = domain.getAllPossibleStates(cur);
                 for (AState possibleNeighbour : possibleNeighbours) {
                     stack.push(possibleNeighbour);

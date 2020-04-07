@@ -2,9 +2,13 @@ package algorithms.search;
 
 import java.util.ArrayList;
 
+/**
+ * An Interface for a searchable domain
+ * which can be inserted to a searching algorithm
+ */
 public interface ISearchable {
 
-    public AState getStartState();
-    public AState getGoalState();
-    public ArrayList<AState> getAllPossibleStates(AState cur_state);
+    AState getStartState();
+    AState getGoalState();
+    ArrayList<AState> getAllPossibleStates(AState cur_state);
 }

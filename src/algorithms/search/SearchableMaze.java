@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * A class that implements ISearchable.
+ *
+ */
 public class SearchableMaze implements ISearchable {
 
     Maze maze;
@@ -17,54 +21,20 @@ public class SearchableMaze implements ISearchable {
         try {
             this.maze = maze;
             mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
+
             buildMazeStates();
             set_neighbouring_states();
+
             this.StartState = mazeStates[maze.getStartPosition().getRowIndex()][maze.getStartPosition().getColumnIndex()];
             this.StartState.setName("Start");
+
             this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
             this.GoalState.setName("End");
+
             setCosts();
         }
         catch(Exception ignored){
             System.out.println("SearchableMaze Constructor Exception");
-        };
-
-
-
-
-    }
-
-    private void setCosts() {
-        this.StartState.setCost(0);
-        Queue<MazeState> queue = new LinkedList<>();
-        queue.add(this.StartState);
-        while (!queue.isEmpty()){
-            AState current = queue.poll();
-            ArrayList<AState> possible_neighbours = getAllPossibleStates(current);
-            for (AState possibleNeighbour : possible_neighbours) {
-                MazeState possible_neighbour = (MazeState) possibleNeighbour;
-                if (possible_neighbour == StartState)
-                    continue;
-                if (possible_neighbour.getCost() == Double.MAX_VALUE) {
-                    queue.add(possible_neighbour);
-                }
-                ArrayList<AState> neighbour_possible_neighbours = getAllPossibleStates(possible_neighbour);
-                AState min = neighbour_possible_neighbours.get(0);
-                for (AState a : neighbour_possible_neighbours) {
-                    if (min.getCost() > a.getCost()) {
-                        min = a;
-                    }
-                }
-                int x;
-                if (possible_neighbour.getUp_state() == min || possible_neighbour.getRight_state() == min ||
-                        possible_neighbour.getDown_state() == min || possible_neighbour.getLeft_state() == min)
-                    x = 10;
-                else
-                    x = 15;
-
-                possible_neighbour.setCost(x + min.getCost());
-
-            }
         }
     }
 
@@ -76,13 +46,13 @@ public class SearchableMaze implements ISearchable {
             }
         }
 
-        for (int i=0 ; i < mazeStates.length ; i++){
-            for (int j=0 ; j < mazeStates[0].length ; j++){
-                for (int k = 0 ; k < mazeStates[i][j].getCurrent_position().getMovable_neighbours().size(); k++){
-                    Position moveable_neighbour = mazeStates[i][j].getCurrent_position().getMovable_neighbours().get(k);
+        for (MazeState[] mazeState : mazeStates) {
+            for (int j = 0; j < mazeStates[0].length; j++) {
+                for (int k = 0; k < mazeState[j].getCurrent_position().getMovable_neighbours().size(); k++) {
+                    Position moveable_neighbour = mazeState[j].getCurrent_position().getMovable_neighbours().get(k);
                     int row_index = moveable_neighbour.getRowIndex();
                     int col_index = moveable_neighbour.getColumnIndex();
-                    mazeStates[i][j].getMoveable_states().add(mazeStates[row_index][col_index]);
+                    mazeState[j].getMoveable_states().add(mazeStates[row_index][col_index]);
                 }
             }
         }
@@ -119,6 +89,40 @@ public class SearchableMaze implements ISearchable {
         }
     }
 
+    private void setCosts() {
+        this.StartState.setCost(0);
+        Queue<MazeState> queue = new LinkedList<>();
+        queue.add(this.StartState);
+        while (!queue.isEmpty()){
+            AState current = queue.poll();
+            ArrayList<AState> possible_neighbours = getAllPossibleStates(current);
+            for (AState possibleNeighbour : possible_neighbours) {
+                MazeState possible_neighbour = (MazeState) possibleNeighbour;
+                if (possible_neighbour == StartState)
+                    continue;
+                if (possible_neighbour.getCost() == Double.MAX_VALUE) {
+                    queue.add(possible_neighbour);
+                }
+                ArrayList<AState> neighbour_possible_neighbours = getAllPossibleStates(possible_neighbour);
+                AState min = neighbour_possible_neighbours.get(0);
+                for (AState a : neighbour_possible_neighbours) {
+                    if (min.getCost() > a.getCost()) {
+                        min = a;
+                    }
+                }
+                int x;
+                if (possible_neighbour.getUp_state() == min || possible_neighbour.getRight_state() == min ||
+                        possible_neighbour.getDown_state() == min || possible_neighbour.getLeft_state() == min)
+                    x = 10;
+                else
+                    x = 15;
+
+                possible_neighbour.setCost(x + min.getCost());
+
+            }
+        }
+    }
+
     @Override
     public AState getStartState() {
         return StartState;
@@ -129,6 +133,10 @@ public class SearchableMaze implements ISearchable {
         return GoalState;
     }
 
+    /**
+     * @param cur_state the current state which its neighbouring states you want to discover.
+     * @return an ArrayList of all cur_states neighbours.
+     */
     @Override
     public ArrayList<AState> getAllPossibleStates(AState cur_state){
         if(cur_state == null)
@@ -139,11 +147,9 @@ public class SearchableMaze implements ISearchable {
         if(cur.getUp_state() != null) {
             if(cur.getUp_state().getLeft_state() != null){
                 p_states.add(cur.getUp_state().getLeft_state());
-                cur.getUp_state().getLeft_state().setPredecessor(cur.getUp_state());
             }
             if(cur.getUp_state().getRight_state() != null) {
                 p_states.add(cur.getUp_state().getRight_state());
-                cur.getUp_state().getRight_state().setPredecessor(cur.getUp_state());
             }
             p_states.add(cur.getUp_state());
         }
@@ -151,11 +157,9 @@ public class SearchableMaze implements ISearchable {
         if(cur.getRight_state() != null) {
             if(cur.getRight_state().getUp_state() != null) {
                 p_states.add(cur.getRight_state().getUp_state());
-                cur.getRight_state().getUp_state().setPredecessor(cur.getRight_state());
             }
             if(cur.getRight_state().getDown_state() != null) {
                 p_states.add(cur.getRight_state().getDown_state());
-                cur.getRight_state().getDown_state().setPredecessor(cur.getRight_state());
             }
             p_states.add(cur.getRight_state());
         }
@@ -164,11 +168,9 @@ public class SearchableMaze implements ISearchable {
 
             if(cur.getDown_state().getLeft_state() != null){
                 p_states.add(cur.getDown_state().getLeft_state());
-                cur.getDown_state().getLeft_state().setPredecessor(cur.getDown_state());
             }
             if(cur.getDown_state().getRight_state() != null) {
                 p_states.add(cur.getDown_state().getRight_state());
-                cur.getDown_state().getRight_state().setPredecessor(cur.getDown_state());
             }
             p_states.add(cur.getDown_state());
         }
@@ -177,11 +179,9 @@ public class SearchableMaze implements ISearchable {
 
             if(cur.getLeft_state().getUp_state() != null) {
                 p_states.add(cur.getLeft_state().getUp_state());
-                cur.getLeft_state().getUp_state().setPredecessor(cur.getLeft_state());
             }
             if(cur.getLeft_state().getDown_state() != null) {
                 p_states.add(cur.getLeft_state().getDown_state());
-                cur.getLeft_state().getDown_state().setPredecessor(cur.getLeft_state());
             }
             p_states.add(cur.getLeft_state());
         }

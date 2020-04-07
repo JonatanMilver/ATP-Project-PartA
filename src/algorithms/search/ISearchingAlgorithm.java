@@ -1,7 +1,10 @@
 package algorithms.search;
 
+/**
+ * An Interface for a searching algorithm
+ */
 public interface ISearchingAlgorithm {
-    public Solution solve(ISearchable domain);
-    public int getNumberOfNodesEvaluated();
-    public String getName();
+    Solution solve(ISearchable domain);
+    int getNumberOfNodesEvaluated();
+    String getName();
 }

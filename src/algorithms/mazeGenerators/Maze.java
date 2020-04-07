@@ -181,20 +181,20 @@ public class Maze {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
                 if(i==2*StartPosition.getRowIndex() && j == 2*StartPosition.getColumnIndex()){
-                    System.out.print(BACKGROUND_RED + ANSI_RED + "S"  + ANSI_RESET);
+                    System.out.print(BACKGROUND_RED + ANSI_RED + " S "  + ANSI_RESET);
 //                    System.out.println(" S");
 
                 }
                 else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex()) {
-                    System.out.print(BACKGROUND_GREEN + ANSI_GREEN + "E" + ANSI_RESET);
+                    System.out.print(BACKGROUND_GREEN + ANSI_GREEN + " E " + ANSI_RESET);
 //                    System.out.println(" E");
                 }
                 else if(mazeArr[i][j] == 1) {
-                    System.out.print(BACKGROUND_WHITE + ANSI_WHITE + String.format("%d", mazeArr[i][j]) + ANSI_RESET);
+                    System.out.print(BACKGROUND_WHITE + ANSI_WHITE + String.format(" %d ", mazeArr[i][j]) + ANSI_RESET);
 //                    System.out.println(String.format("%d", mazeArr[i][j]));
                 }
                 else if(mazeArr[i][j] == 0){
-                    System.out.print(BACKGROUND_BLACK + ANSI_BLACK + String.format("%d" , mazeArr[i][j]) + ANSI_RESET);
+                    System.out.print(BACKGROUND_BLACK + ANSI_BLACK + String.format(" %d " , mazeArr[i][j]) + ANSI_RESET);
 //                    System.out.println(String.format("%d" , mazeArr[i][j]));
                 }
 
