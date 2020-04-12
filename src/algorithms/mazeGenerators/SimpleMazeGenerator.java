@@ -8,8 +8,6 @@ import java.util.Random;
  * The maze will always have a solution.
  */
 public class SimpleMazeGenerator extends AMazeGenerator {
-    public SimpleMazeGenerator() {
-    }
 
     @Override
     public Maze generate(int rows, int columns) {

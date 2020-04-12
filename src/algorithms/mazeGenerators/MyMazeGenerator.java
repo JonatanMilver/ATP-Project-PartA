@@ -17,17 +17,16 @@ public class MyMazeGenerator extends AMazeGenerator {
     @Override
     public Maze generate(int rows, int columns) {
 
-        if(rows < 0 || columns < 0)
-            throw new ArithmeticException("Rows and columns must be non-negative.");
-
         Maze mymaze;
-        if (rows == 1 || columns == 1){
+        if(rows <= 0 || columns <= 0) {
+//            throw new ArithmeticException("Rows and columns must be non-negative.");
+            return null;
+        }
+        else if (rows == 1 || columns == 1){
             //generating new maze with start position in index (0,0) and goal position in index (r-1,c-1)
             mymaze = new Maze(rows, columns,new Position(0,0),new Position(rows-1,columns-1));
         }
-        else if(rows == 0 && columns == 0) {
-            return null;
-        }
+
         else{
             //generating new maze with random start and goal positions
             ArrayList<Position> startGoal = totalyRandomStartGoal(rows, columns);

@@ -1,7 +1,7 @@
 package algorithms.mazeGenerators;
 
-import javax.swing.*;
-import java.util.Arrays;
+import algorithms.search.MazeState;
+import algorithms.search.Solution;
 
 /**
  * A maze class.
@@ -23,44 +23,28 @@ public class Maze {
         this.columns = columns;
         mazeArr = new int[rows+rows-1][columns+columns-1];
         posArr = new Position[rows][columns];
+
         buildPositions(rows,columns);
         setNeighbours(rows, columns);
+
         this.StartPosition = posArr[StartPosition.getRowIndex()][StartPosition.getColumnIndex()];
         this.GoalPosition = posArr[GoalPosition.getRowIndex()][GoalPosition.getColumnIndex()];
-
-
     }
 
     public int getRows() {
         return rows;
     }
 
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
     public int getColumns() {
         return columns;
-    }
-
-    public void setColumns(int columns) {
-        this.columns = columns;
     }
 
     public Position getStartPosition() {
         return StartPosition;
     }
 
-    public void setStartPosition(Position startPosition) {
-        StartPosition = startPosition;
-    }
-
     public Position getGoalPosition() {
         return GoalPosition;
-    }
-
-    public void setGoalPosition(Position goalPosition) {
-        GoalPosition = goalPosition;
     }
 
     public int[][] getMazeArr() {
@@ -73,10 +57,6 @@ public class Maze {
 
     public Position[][] getPosArr() {
         return posArr;
-    }
-
-    public void setPosArr(Position[][] posArr) {
-        this.posArr = posArr;
     }
 
     private void buildPositions(int rows, int columns){
@@ -173,7 +153,6 @@ public class Maze {
             for(int j=0;j<mazeArr[i].length;j++){
                 if(i==2*StartPosition.getRowIndex() && j == 2*StartPosition.getColumnIndex()){
                     System.out.print("S");
-
                 }
                 else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex()) {
                     System.out.print("E");
@@ -185,12 +164,11 @@ public class Maze {
                     System.out.print(String.format("%d" , mazeArr[i][j]));
                 }
 
-
             }
             System.out.println();
         }
     }
-    public void printWithColor() {
+    public void printWithColor(Solution sol) {
         final String ANSI_RESET = "\u001B[0m";
         final String ANSI_BLACK = "\u001b[30m";
         final String ANSI_RED = "\u001B[31m";
@@ -203,19 +181,31 @@ public class Maze {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
                 if(i==2*StartPosition.getRowIndex() && j == 2*StartPosition.getColumnIndex()){
-                    System.out.print(BACKGROUND_RED + ANSI_RED + " S "  + ANSI_RESET);
+                    System.out.print(BACKGROUND_RED + /*ANSI_RED +*/ " S "  + ANSI_RESET);
+                }
 
-                }
                 else if(i==2*GoalPosition.getRowIndex() && j== 2*GoalPosition.getColumnIndex()) {
-                    System.out.print(BACKGROUND_GREEN + ANSI_GREEN + " E " + ANSI_RESET);
+                    System.out.print(BACKGROUND_GREEN + /*ANSI_GREEN +*/ " E " + ANSI_RESET);
                 }
+
                 else if(mazeArr[i][j] == 1) {
                     System.out.print(BACKGROUND_WHITE + ANSI_WHITE + String.format(" %d ", mazeArr[i][j]) + ANSI_RESET);
                 }
-                else if(mazeArr[i][j] == 0){
-                    System.out.print(BACKGROUND_BLACK + ANSI_BLACK + String.format(" %d " , mazeArr[i][j]) + ANSI_RESET);
-                }
 
+                else if(mazeArr[i][j] == 0){
+                    boolean t = true;
+                    for (int k = 0 ; k < sol.getSolutionPath().size(); k++){
+                        MazeState s = (MazeState) sol.getSolutionPath().get(k);
+                        if ( 2*s.getCurrent_position().getRowIndex() == i && 2*s.getCurrent_position().getColumnIndex() == j){
+                            System.out.print(String.format(" %d " , mazeArr[i][j]));
+                            t = false;
+                            break;
+                        }
+                    }
+                    if (t){
+                        System.out.print(BACKGROUND_BLACK + ANSI_BLACK + String.format(" %d " , mazeArr[i][j]) + ANSI_RESET);
+                    }
+                }
 
             }
             System.out.println("\u001b[107m");

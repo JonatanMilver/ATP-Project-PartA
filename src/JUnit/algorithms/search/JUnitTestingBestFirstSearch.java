@@ -2,7 +2,6 @@ package algorithms.search;
 
 import algorithms.mazeGenerators.*;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class JUnitTestingBestFirstSearch {
@@ -19,10 +18,19 @@ class JUnitTestingBestFirstSearch {
     private ISearchable domain2 = new SearchableMaze(smallestMaze);
     private ISearchable domain3 = new SearchableMaze(zeroMaze);
 
+    @Test
+    void buildMyMaze_Test() {
+        assertNull(myMaze.generate(0,0) , "option1");
+        assertNull(myMaze.generate(0,1) , "option2");
+        assertNull(myMaze.generate(1,0) , "option3");
+        assertNull(myMaze.generate(-5,30) , "option4");
 
-
-
-
+        for (int i = 1 ; i < 100 ; i++){
+            for (int j = 1 ; j < 100 ; j++){
+                assertNotNull(myMaze.generate(i,j), "output is null in maze size: (" + i +"," + j + ")");
+            }
+        }
+    }
 
     @Test
     void solve() throws Exception {

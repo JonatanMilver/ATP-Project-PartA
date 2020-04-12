@@ -42,8 +42,6 @@ public class Position {
 
     public boolean getVisited(){ return this.visited; }
 
-
-
     public ArrayList<Position> getNeighbours() {
         return neighbours;
     }
@@ -52,16 +50,8 @@ public class Position {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getColumnIndex() {
         return column;
-    }
-
-    public void setColumn(int column) {
-        this.column = column;
     }
 
     public void addNeighbour(Position otherPos){

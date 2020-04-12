@@ -36,18 +36,6 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
                     sol = buildSolution(cur);
                     resetDomain(visitedTracker);
-//                    AState backTracker = cur;
-//                    while (backTracker != null) {
-//                        sol.getSolutionPath().add(backTracker);
-//                        backTracker = backTracker.getCameFrom();
-//                    }
-//                    sol.reversePath();
-//                    double sol_cost = sol.getSolutionPath().size();
-//                    sol.setSolutionCost(sol_cost);
-//                    for (AState aState : visitedTracker) {
-//                        aState.setVisited(false);
-//                        aState.setCameFrom(null);
-//                    }
                     return sol;
                 }
 

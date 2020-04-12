@@ -26,13 +26,6 @@ public class DepthFirstSearch extends ASearchingAlgorithm {
             if(cur.equals(domain.getGoalState())){
                 sol = buildSolution(cur);
                 resetDomain(visitedTrack);
-//                AState backTracker = cur;
-//                while(backTracker != null){
-//                    sol.getSolutionPath().add(backTracker);
-//                    backTracker = backTracker.getCameFrom();
-//                }
-//                sol.reversePath();
-//                for (AState aState : visitedTrack) aState.setVisited(false);
                 return sol;
             }
             if(!cur.isVisited()){
