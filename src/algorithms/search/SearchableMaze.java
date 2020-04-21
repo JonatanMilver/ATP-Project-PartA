@@ -18,24 +18,17 @@ public class SearchableMaze implements ISearchable {
     MazeState[][] mazeStates;
 
     public SearchableMaze(Maze maze) {
-        try {
-            this.maze = maze;
-            mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
+        this.maze = maze;
+        mazeStates = new MazeState[maze.getPosArr().length][maze.getPosArr()[0].length];
 
-            buildMazeStates();
-            set_neighbouring_states();
+        buildMazeStates();
+        set_neighbouring_states();
 
-            this.StartState = mazeStates[maze.getStartPosition().getRowIndex()][maze.getStartPosition().getColumnIndex()];
-            this.StartState.setName("Start");
+        this.StartState = mazeStates[maze.getStartPosition().getRowIndex()][maze.getStartPosition().getColumnIndex()];
 
-            this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
-            this.GoalState.setName("End");
+        this.GoalState = mazeStates[maze.getGoalPosition().getRowIndex()][maze.getGoalPosition().getColumnIndex()];
 
-            setCosts();
-        }
-        catch(Exception ignored){
-            System.out.println("SearchableMaze Constructor Exception");
-        }
+        setCosts();
     }
 
     private void buildMazeStates() {

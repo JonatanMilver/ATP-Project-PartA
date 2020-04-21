@@ -23,38 +23,33 @@ public class BreadthFirstSearch extends ASearchingAlgorithm {
 
         if(domain == null)
             return null;
-        try {
-            Solution sol = new Solution();
-            ArrayList<AState> visitedTracker = new ArrayList<>();
-            queue.add(domain.getStartState());
-            domain.getStartState().setVisited(true); //Starting from the first state
-            visitedTracker.add(domain.getStartState());
 
-            while (!queue.isEmpty()) {
-                AState cur = queue.poll();
-                if (cur.equals(domain.getGoalState())) {
+        Solution sol = new Solution();
+        ArrayList<AState> visitedTracker = new ArrayList<>();
+        queue.add(domain.getStartState());
+        domain.getStartState().setVisited(true); //Starting from the first state
+        visitedTracker.add(domain.getStartState());
 
-                    sol = buildSolution(cur);
-                    resetDomain(visitedTracker);
-                    return sol;
-                }
+        while (!queue.isEmpty()) {
+            AState cur = queue.poll();
+            if (cur.equals(domain.getGoalState())) {
 
-                for (int i = 0; i < domain.getAllPossibleStates(cur).size(); i++) {
-                    if (!domain.getAllPossibleStates(cur).get(i).isVisited()) {
-                        domain.getAllPossibleStates(cur).get(i).setVisited(true); //Setting neighbours as visited
-                        visitedTracker.add(domain.getAllPossibleStates(cur).get(i));
-                        increaseVisited();
-                        domain.getAllPossibleStates(cur).get(i).setCameFrom(cur); //Setting current as parent
-                        queue.add(domain.getAllPossibleStates(cur).get(i));
-                    }
+                sol = buildSolution(cur);
+                resetDomain(visitedTracker);
+                return sol;
+            }
+
+            for (int i = 0; i < domain.getAllPossibleStates(cur).size(); i++) {
+                if (!domain.getAllPossibleStates(cur).get(i).isVisited()) {
+                    domain.getAllPossibleStates(cur).get(i).setVisited(true); //Setting neighbours as visited
+                    visitedTracker.add(domain.getAllPossibleStates(cur).get(i));
+                    increaseVisited();
+                    domain.getAllPossibleStates(cur).get(i).setCameFrom(cur); //Setting current as parent
+                    queue.add(domain.getAllPossibleStates(cur).get(i));
                 }
             }
-            return sol;
         }
-        catch(Exception e){
-            System.out.println("BFS - Solve method Exception");
-            return null;
-        }
+        return sol;
 
     }
 

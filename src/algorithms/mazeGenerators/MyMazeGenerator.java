@@ -19,7 +19,6 @@ public class MyMazeGenerator extends AMazeGenerator {
 
         Maze mymaze;
         if(rows <= 0 || columns <= 0) {
-//            throw new ArithmeticException("Rows and columns must be non-negative.");
             return null;
         }
         else if (rows == 1 || columns == 1){
