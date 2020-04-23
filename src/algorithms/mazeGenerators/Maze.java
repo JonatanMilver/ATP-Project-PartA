@@ -52,12 +52,15 @@ public class Maze {
         this.posArr = new Position[this.rows][this.columns];
 //        Setting neighbours and positions
         buildPositions(this.rows, this.columns);
-        setNeighbours(this.rows, this.columns);
+//        setNeighbours(this.rows, this.columns);
+//      Placing 0/1 at the display ( mazeArr)
+        buildMazeFromBytes(decompressed , columns);
 //      Setting start and goal position according to given info from the byte array.
         this.StartPosition = posArr[start_row][start_column];
         this.GoalPosition = posArr[end_row][end_column];
-//      Placing 0/1 at the display ( mazeArr)
-        buildMazeFromBytes(decompressed , columns);
+        createNeighboursFromBytes();
+
+
 
 
     }
@@ -204,7 +207,32 @@ public class Maze {
             return null;
         }
     }
-
+    public void createNeighboursFromBytes(){
+        for(int i=0; i < this.posArr.length;i++){
+            for(int j=0;j<this.posArr[i].length ; j++){
+                if(findPosition(i-1,j) != null){
+                    if(mazeArr[2*i-1][2*j] == 0){
+                        posArr[i][j].addNeighbour(posArr[i-1][j]);
+                    }
+                }
+                if(findPosition(i,j+1) != null){
+                    if(mazeArr[2*i][2*j+1] == 0){
+                        posArr[i][j].addNeighbour(posArr[i][j+1]);
+                    }
+                }
+                if(findPosition(i+1,j) != null){
+                    if(mazeArr[2*i+1][2*j] == 0){
+                        posArr[i][j].addNeighbour(posArr[i+1][j]);
+                    }
+                }
+                if(findPosition(i,j-1) != null){
+                    if(mazeArr[2*i][2*j-1] == 0){
+                        posArr[i][j].addNeighbour(posArr[i][j-1]);
+                    }
+                }
+            }
+        }
+    }
     public void print() {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
