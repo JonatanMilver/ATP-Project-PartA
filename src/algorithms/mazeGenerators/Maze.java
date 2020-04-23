@@ -3,6 +3,8 @@ package algorithms.mazeGenerators;
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
 
+import java.math.BigInteger;
+
 /**
  * A maze class.
  * Holds maze's rows and columns.
@@ -211,4 +213,61 @@ public class Maze {
             System.out.println("\u001b[107m");
         }
     }
+
+
+
+
+
+
+
+
+
+
+    public byte[] toByteArray(){
+        byte[] bytemaze = new byte[24 + (mazeArr.length*mazeArr[0].length)];
+
+        byte[] numOfRows = bigIntToByteArray(mazeArr.length);
+        byte[] numOfCols = bigIntToByteArray(mazeArr[0].length);
+
+        byte[] startRows = bigIntToByteArray(StartPosition.getRowIndex());
+        byte[] startCols = bigIntToByteArray(StartPosition.getColumnIndex());
+
+        byte[] endRows = bigIntToByteArray(GoalPosition.getRowIndex());
+        byte[] endCols = bigIntToByteArray(GoalPosition.getColumnIndex());
+
+        copyToBytemaze(numOfRows , bytemaze,0);
+        copyToBytemaze(numOfCols , bytemaze , 4);
+        copyToBytemaze(startRows , bytemaze , 8);
+        copyToBytemaze(startCols , bytemaze , 12);
+        copyToBytemaze(endRows , bytemaze , 16);
+        copyToBytemaze(endCols , bytemaze , 20);
+
+        int index = 24;
+        for (int[] row : mazeArr) {
+            for (int j = 0; j < mazeArr[0].length; j++) {
+                bytemaze[index] = (byte) row[j];
+                index++;
+            }
+        }
+        
+        return bytemaze;
+    }
+
+    private void copyToBytemaze(byte[] tocopy, byte[] bytemaze , int fromIndex) {
+
+        for (int i = 0 ; i < 4-tocopy.length ; i++){
+            bytemaze[fromIndex] = 0;
+            fromIndex++;
+        }
+        for (byte b : tocopy) {
+            bytemaze[fromIndex] = b;
+            fromIndex++;
+        }
+    }
+
+    private byte[] bigIntToByteArray(int i) {
+        BigInteger bigInt = BigInteger.valueOf(i);
+        return bigInt.toByteArray();
+    }
+
 }
