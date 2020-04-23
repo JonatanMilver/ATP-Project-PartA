@@ -1,7 +1,8 @@
 package algorithms.mazeGenerators;
-
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
+import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * A maze class.
@@ -29,6 +30,65 @@ public class Maze {
 
         this.StartPosition = posArr[StartPosition.getRowIndex()][StartPosition.getColumnIndex()];
         this.GoalPosition = posArr[GoalPosition.getRowIndex()][GoalPosition.getColumnIndex()];
+    }
+
+    /**
+     * Gets decompressed byte array and builds a maze from it's content
+     * 24 first elements are the features of the maze.
+     * other elements will have the content of the maze(walls, passes...)
+     * @param decompressed byte[]
+     */
+    public Maze(byte[] decompressed) {
+//        Retrieving all the information from the byte[]
+        int rows = new BigInteger(Arrays.copyOfRange(decompressed, 0 , 4)).intValue();
+        int columns = new BigInteger(Arrays.copyOfRange(decompressed, 4 , 8)).intValue();
+        int start_row = new BigInteger(Arrays.copyOfRange(decompressed, 8, 12)).intValue();
+        int start_column = new BigInteger(Arrays.copyOfRange(decompressed, 12, 16)).intValue();
+        int end_row = new BigInteger(Arrays.copyOfRange(decompressed, 16, 20)).intValue();
+        int end_column = new BigInteger(Arrays.copyOfRange(decompressed, 20, 24)).intValue();
+        this.rows = (rows+1)/2;
+        this.columns = (columns+1)/2;
+        this.mazeArr = new int[rows][columns];
+        this.posArr = new Position[this.rows][this.columns];
+//        Setting neighbours and positions
+        buildPositions(this.rows, this.columns);
+//        setNeighbours(this.rows, this.columns);
+//      Placing 0/1 at the display ( mazeArr)
+        buildMazeFromBytes(decompressed , columns);
+//      Setting start and goal position according to given info from the byte array.
+        this.StartPosition = posArr[start_row][start_column];
+        this.GoalPosition = posArr[end_row][end_column];
+        createNeighboursFromBytes();
+
+
+
+
+    }
+
+    /**
+     * Builds the maze array(mazeArr) by setting "0/1" at the rights places
+     * given by the decompressed byte array
+     * A private method being called at the Maze(byte[] decompressed) constructor
+     * @param decompressed  byte[]
+     * @param columns int
+     */
+    private void buildMazeFromBytes(byte[] decompressed, int columns){
+        int decompressed_length = decompressed.length;
+        int row = 0;
+        int column = 0 ;
+        int decompressed_index = 24;
+        int content_length = decompressed_length - decompressed_index;
+        //Loop runs until every cell at the maze is filled with wall/pass.
+        while(row*column < content_length){
+            column = 0;
+            while(column < columns) {
+                this.mazeArr[row][column] = decompressed[decompressed_index];
+                column++;
+                decompressed_index++;
+            }
+            row++;
+        }
+
     }
 
     public int getRows() {
@@ -147,7 +207,32 @@ public class Maze {
             return null;
         }
     }
-
+    public void createNeighboursFromBytes(){
+        for(int i=0; i < this.posArr.length;i++){
+            for(int j=0;j<this.posArr[i].length ; j++){
+                if(findPosition(i-1,j) != null){
+                    if(mazeArr[2*i-1][2*j] == 0){
+                        posArr[i][j].addNeighbour(posArr[i-1][j]);
+                    }
+                }
+                if(findPosition(i,j+1) != null){
+                    if(mazeArr[2*i][2*j+1] == 0){
+                        posArr[i][j].addNeighbour(posArr[i][j+1]);
+                    }
+                }
+                if(findPosition(i+1,j) != null){
+                    if(mazeArr[2*i+1][2*j] == 0){
+                        posArr[i][j].addNeighbour(posArr[i+1][j]);
+                    }
+                }
+                if(findPosition(i,j-1) != null){
+                    if(mazeArr[2*i][2*j-1] == 0){
+                        posArr[i][j].addNeighbour(posArr[i][j-1]);
+                    }
+                }
+            }
+        }
+    }
     public void print() {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){
