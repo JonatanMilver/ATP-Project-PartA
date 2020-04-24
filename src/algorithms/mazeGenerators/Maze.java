@@ -209,6 +209,7 @@ public class Maze {
             return null;
         }
     }
+
     public void createNeighboursFromBytes(){
         for(int i=0; i < this.posArr.length;i++){
             for(int j=0;j<this.posArr[i].length ; j++){
@@ -235,6 +236,7 @@ public class Maze {
             }
         }
     }
+
     public void print() {
         for(int i=0;i<mazeArr.length;i++){
             for(int j=0;j<mazeArr[i].length;j++){

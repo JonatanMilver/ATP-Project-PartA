@@ -77,6 +77,7 @@ public class MyCompressorOutputStream extends OutputStream {
                             ret[index] = (byte) count;
                             index++;
                             count = 1;
+//                            countingZeros = false;
                         }
                     }
                     else {
