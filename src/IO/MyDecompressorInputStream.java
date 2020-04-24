@@ -26,7 +26,7 @@ public class MyDecompressorInputStream extends InputStream {
     @Override
     public int read(byte[] maze_bytes) throws IOException {
         //initialization
-        int total_length = 0;
+        int total_length = 24;
         for(int i=0;i<24;i++){
             maze_bytes[i] = (byte)in.read();
         }
@@ -39,6 +39,7 @@ public class MyDecompressorInputStream extends InputStream {
             int nums_amount = 1;
             while(nums_amount <= next_byte) {
                 maze_bytes[total_length] = entry;
+                total_length++;
                 nums_amount++;
             }
             //chooses between the entry 0/1

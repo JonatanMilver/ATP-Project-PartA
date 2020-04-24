@@ -41,10 +41,6 @@ public class RunCompressDecompressMaze {
 
         Maze loadedMaze = new Maze(savedMazeBytes);
         boolean areMazesEquals = Arrays.equals(loadedMaze.toByteArray(),maze.toByteArray());
-        System.out.println(Arrays.toString(loadedMaze.toByteArray()));
-        System.out.println();
-        System.out.println();
-        System.out.println(Arrays.toString(maze.toByteArray()));
         System.out.println(String.format("Mazes equal: %s",areMazesEquals)); //maze should be equal to loadedMaze
     }
 }
