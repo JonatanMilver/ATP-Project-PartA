@@ -17,7 +17,11 @@ public class RunCompressDecompressMaze {
     public static void main(String[] args) {
         String mazeFileName = "savedMaze.maze";
         AMazeGenerator mazeGenerator = new MyMazeGenerator();
-        Maze maze = mazeGenerator.generate(2, 2); //Generate new maze
+        Maze maze = mazeGenerator.generate(30, 30); //Generate new maze
+
+        maze.print();
+        System.out.println();
+
 
         try {
             // save maze to a file
@@ -41,10 +45,19 @@ public class RunCompressDecompressMaze {
         }
 
         Maze loadedMaze = new Maze(savedMazeBytes);
+
         boolean areMazesEquals = Arrays.equals(loadedMaze.toByteArray(),maze.toByteArray());
         System.out.println(String.format("Mazes equal: %s",areMazesEquals)); //maze should be equal to loadedMaze
-//        System.out.println(Arrays.toString(loadedMaze.toByteArray()));
-//        System.out.println(Arrays.toString(maze.toByteArray()));
+
+        System.out.println();
+
+        System.out.println("toByteArray length: " + maze.toByteArray().length);
+
+        System.out.println();
+
+        System.out.println("Maze:       " + Arrays.toString(maze.toByteArray()));
+        System.out.println("loadedMaze: " + Arrays.toString(loadedMaze.toByteArray()));
+
 //        System.out.println(loadedMaze.toByteArray().length);
 //        for(int i=0; i<maze.toByteArray().length;i++) {
 //            if (maze.toByteArray()[i] != loadedMaze.toByteArray()[i]) {
