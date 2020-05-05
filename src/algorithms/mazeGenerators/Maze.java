@@ -1,6 +1,13 @@
 package algorithms.mazeGenerators;
+import IO.MyCompressorOutputStream;
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
+import javafx.geometry.Pos;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 
@@ -13,19 +20,21 @@ import java.math.BigInteger;
  * mazeArr - int array for the maze's presentation
  * posArr - Array of positions holding each position at it's place.
  */
-public class Maze {
+public class Maze implements Serializable{
     private int rows;
     private int columns;
     private Position StartPosition;
     private Position GoalPosition;
     private int[][] mazeArr;
     private Position[][] posArr;
+    private byte[] bytes;
 
     public Maze(int rows, int columns , Position StartPosition,Position GoalPosition) {
         this.rows = rows;
         this.columns = columns;
         mazeArr = new int[rows+rows-1][columns+columns-1];
         posArr = new Position[rows][columns];
+        bytes = null;
 
         buildPositions(rows,columns);
         setNeighbours(rows, columns);
@@ -41,7 +50,40 @@ public class Maze {
      * @param decompressed byte[]
      */
     public Maze(byte[] decompressed) {
-//        Retrieving all the information from the byte[]
+        initializeMaze(decompressed);
+    }
+
+    /**
+     * overrides writeObject of ObjectOutputStream
+     * made for writing a smaller size of the object
+     * used to write Mazes while communicating between different servers.
+     * @param outputStream ObjectOutputStream
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        //convert the maze to byte array and write it to outputStream
+        outputStream.writeObject(toByteArray());
+    }
+
+    /**
+     * overrides readObject of ObjectInputStream
+     * receives a byte array and builds the maze from the array using initializeMaze method
+     * used to read Mazes while communicating between different servers.
+     * @param inputStream ObjectInputStream.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+        bytes = (byte[]) inputStream.readObject();
+        initializeMaze(bytes);
+    }
+
+    /**
+     * Build a maze from a given data in byte array.
+     * @param decompressed byte[]
+     */
+    private void initializeMaze(byte[] decompressed){
+        //        Retrieving all the information from the byte[]
         int rows = new BigInteger(Arrays.copyOfRange(decompressed, 0 , 4)).intValue();
         int columns = new BigInteger(Arrays.copyOfRange(decompressed, 4 , 8)).intValue();
         int start_row = new BigInteger(Arrays.copyOfRange(decompressed, 8, 12)).intValue();
@@ -54,18 +96,14 @@ public class Maze {
         this.posArr = new Position[this.rows][this.columns];
 //        Setting neighbours and positions
         buildPositions(this.rows, this.columns);
-//        setNeighbours(this.rows, this.columns);
 //      Placing 0/1 at the display ( mazeArr)
         buildMazeFromBytes(decompressed , columns);
 //      Setting start and goal position according to given info from the byte array.
         this.StartPosition = posArr[start_row][start_column];
         this.GoalPosition = posArr[end_row][end_column];
         createNeighboursFromBytes();
-
-
-
-
     }
+
 
     /**
      * Builds the maze array(mazeArr) by setting "0/1" at the rights places
@@ -121,6 +159,11 @@ public class Maze {
         return posArr;
     }
 
+    /**
+     * Build positions array(posArr).
+     * @param rows int
+     * @param columns int
+     */
     private void buildPositions(int rows, int columns){
         for(int i=0;i<rows; i++){
             for(int j=0;j<columns;j++){
@@ -128,6 +171,12 @@ public class Maze {
             }
         }
     }
+
+    /**
+     * Builds neighbours array list
+     * @param rows int
+     * @param columns int
+     */
     private void setNeighbours(int rows, int columns){
         for(int i=0;i<rows;i++){
             for(int j=0;j<columns;j++){
@@ -201,6 +250,12 @@ public class Maze {
         }
     }
 
+    /**
+     * Find whether a position exists or not
+     * @param x int
+     * @param y int
+     * @return Position if found - else return null.
+     */
     public Position findPosition(int x, int y){
         try{
             return posArr[x][y];
@@ -210,27 +265,34 @@ public class Maze {
         }
     }
 
+    /**
+     * Creates the neighbours list - being used after receiving maze data in bytes.
+     */
     public void createNeighboursFromBytes(){
         for(int i=0; i < this.posArr.length;i++){
             for(int j=0;j<this.posArr[i].length ; j++){
                 if(findPosition(i-1,j) != null){
                     if(mazeArr[2*i-1][2*j] == 0){
                         posArr[i][j].addNeighbour(posArr[i-1][j]);
+                        posArr[i][j].getMovable_neighbours().add(posArr[i-1][j]);
                     }
                 }
                 if(findPosition(i,j+1) != null){
                     if(mazeArr[2*i][2*j+1] == 0){
                         posArr[i][j].addNeighbour(posArr[i][j+1]);
+                        posArr[i][j].getMovable_neighbours().add(posArr[i][j+1]);
                     }
                 }
                 if(findPosition(i+1,j) != null){
                     if(mazeArr[2*i+1][2*j] == 0){
                         posArr[i][j].addNeighbour(posArr[i+1][j]);
+                        posArr[i][j].getMovable_neighbours().add(posArr[i+1][j]);
                     }
                 }
                 if(findPosition(i,j-1) != null){
                     if(mazeArr[2*i][2*j-1] == 0){
                         posArr[i][j].addNeighbour(posArr[i][j-1]);
+                        posArr[i][j].getMovable_neighbours().add(posArr[i][j-1]);
                     }
                 }
             }
