@@ -1,5 +1,9 @@
 package algorithms.mazeGenerators;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +11,7 @@ import java.util.ArrayList;
  * Holds an ArrayList of it's neighbours in order to make the maze.
  * Holds an ArrayList of neighbours that it can reach to.
  */
-public class Position {
+public class Position implements Serializable{
     private int row;
     private int column;
     private boolean visited;
@@ -31,6 +35,7 @@ public class Position {
         this.neighbours = new ArrayList<Position>();
         this.movable_neighbours = new ArrayList<>();
     }
+
 
     public boolean isVisited() {
         return visited;

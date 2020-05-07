@@ -1,6 +1,8 @@
 package algorithms.search;
 import algorithms.mazeGenerators.Position;
+import javafx.geometry.Pos;
 
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.ArrayList;
  * implemented specifically for maze states,
  * which can have four possible neighbours at all sides.
  */
-public class MazeState extends AState {
+public class MazeState extends AState implements Serializable {
 
     private Position current_position;
     private ArrayList<MazeState> moveable_states;
@@ -22,12 +24,40 @@ public class MazeState extends AState {
         super(name);
         this.current_position = current_position;
         this.moveable_states = new ArrayList<>();
-
         this.up_state = null;
         this.down_state=null;
         this.left_state=null;
         this.right_state=null;
+    }
 
+    /**
+     * overrides writeObject method of ObjectOutputStream
+     * writes a maze state by position's coordinates
+     * used to write mazeStates while communicating between different servers.
+     * @param outputStream ObjectOutputStream
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream outputStream) throws IOException {
+        outputStream.writeInt(current_position.getRowIndex());
+        outputStream.writeInt(current_position.getColumnIndex());
+    }
+
+    /**
+     * overrides readObject method of ObjectInputStream
+     * builds a position after reading the coordinates.
+     * used to read mazeStates while communicating between different servers.
+     * @param inputStream ObjectInputStream
+     * @throws IOException
+     */
+    private void readObject(ObjectInputStream inputStream) throws IOException {
+        int row = inputStream.readInt();
+        int col = inputStream.readInt();
+        current_position = new Position(row, col);
+        moveable_states = null;
+        up_state = null;
+        down_state = null;
+        left_state = null;
+        right_state = null;
     }
 
     public Position getCurrent_position() {
