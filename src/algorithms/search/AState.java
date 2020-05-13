@@ -1,4 +1,5 @@
 package algorithms.search;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -6,7 +7,7 @@ import java.util.Objects;
  * a basic building block which all searching algorithms can work with,
  * regardless of subclasses implementation.
  */
-public abstract class AState {
+public abstract class AState implements Serializable {
     private String name;
     private double cost;
     private AState cameFrom;

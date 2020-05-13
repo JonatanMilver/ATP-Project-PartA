@@ -1,12 +1,8 @@
 package algorithms.search;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import java.util.zip.InflaterOutputStream;
 
 /**
  * A solution for a Searchable object

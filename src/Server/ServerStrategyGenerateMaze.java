@@ -2,40 +2,51 @@ package Server;
 
 import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.AMazeGenerator;
+import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 
 import java.io.*;
+import java.net.Socket;
 
 public class ServerStrategyGenerateMaze  implements ServerStrategy{
 
 
     @Override
-    public void handleClient(InputStream inFromClient , OutputStream outToClient) throws IOException {
+    public void handleClient(Socket client){
         try{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             OutputStream comp = new MyCompressorOutputStream(baos);
-            ObjectInputStream objectInputStream = new ObjectInputStream(inFromClient);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outToClient);
-            int[] mazeSize = (int[])objectInputStream.readObject();
+            ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
+            try{
 
-            AMazeGenerator mazeGenerator = new MyMazeGenerator();
-            Maze maze = mazeGenerator.generate(mazeSize[0] , mazeSize[1]);
+                int[] mazeSize = (int[])objectInputStream.readObject();
+                IMazeGenerator mazeGenerator = Server.Configurations.getGeneratingAlgorithm();
+                Maze maze = mazeGenerator.generate(mazeSize[0] , mazeSize[1]);
+                if (maze == null){
+                    System.out.println("maze is null!");
+                    return;
+                }
 
-            comp.write(maze.toByteArray());
-            comp.flush();
+                comp.write(maze.toByteArray());
+                comp.flush();
 
-            byte[] mazeBytes = baos.toByteArray();
-            objectOutputStream.writeObject(mazeBytes);
-            objectOutputStream.flush();
-            baos.close();
-            comp.close();
-
-//            comp.write(maze.toByteArray());
-//            comp.flush();
+                byte[] mazeBytes = baos.toByteArray();
+                objectOutputStream.writeObject(mazeBytes);
+                objectOutputStream.flush();
+            }
+            catch (ClassNotFoundException e){
+                e.printStackTrace();
+            }
+            finally {
+                baos.close();
+                comp.close();
+                client.close();
+            }
 
         }
-        catch (IOException | ClassNotFoundException e){
+        catch (IOException e){
             e.printStackTrace();
         }
     }

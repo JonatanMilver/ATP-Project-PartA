@@ -1,10 +1,12 @@
 package Client;
 
+import Server.Server;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Client extends Thread{
+public class Client{
     private IClientStrategy client_strategy;
     private InetAddress host;
     private int port;
@@ -16,10 +18,9 @@ public class Client extends Thread{
     }
 
     public void communicateWithServer(){
-        this.start();
+        new Thread(()->run()).start();
     }
 
-    @Override
     public void run() {
         try {
             Socket socket = new Socket(host, port);
