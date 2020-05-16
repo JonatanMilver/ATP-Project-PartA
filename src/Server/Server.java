@@ -42,9 +42,8 @@ public class Server{
      * Starts the server by running it in a different thread.
      */
     public void start(){
-        Runnable r= new Thread(()->run());
-        pool.execute(r);
-
+        Thread t = new Thread(this::run);
+        t.start();
     }
 
     /**
@@ -67,7 +66,7 @@ public class Server{
                     pool.execute(r);
 
                 }
-                catch ( IOException e){
+                catch (IOException e){
                     System.out.println("Waiting for connections...");
                 }
             }
