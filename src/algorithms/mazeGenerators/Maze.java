@@ -1,8 +1,8 @@
 package algorithms.mazeGenerators;
-import IO.MyCompressorOutputStream;
+
 import algorithms.search.MazeState;
 import algorithms.search.Solution;
-import javafx.geometry.Pos;
+
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import java.math.BigInteger;
+
 
 /**
  * A maze class.

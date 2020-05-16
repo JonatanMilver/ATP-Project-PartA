@@ -1,15 +1,13 @@
 package Server;
 
 import IO.MyCompressorOutputStream;
-import algorithms.mazeGenerators.AMazeGenerator;
 import algorithms.mazeGenerators.IMazeGenerator;
 import algorithms.mazeGenerators.Maze;
-import algorithms.mazeGenerators.MyMazeGenerator;
 
 import java.io.*;
 import java.net.Socket;
 
-public class ServerStrategyGenerateMaze  implements ServerStrategy{
+public class ServerStrategyGenerateMaze implements IServerStrategy {
 
 
     @Override

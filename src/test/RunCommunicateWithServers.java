@@ -3,7 +3,6 @@ package test;
 import IO.MyDecompressorInputStream;
 import Server.*;
 import Client.*;
-import algorithms.mazeGenerators.EmptyMazeGenerator;
 import algorithms.mazeGenerators.Maze;
 import algorithms.mazeGenerators.MyMazeGenerator;
 import algorithms.search.AState;
@@ -13,14 +12,12 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Aviadjo on 3/27/2017.
  */
 public class RunCommunicateWithServers {
     public static void main(String[] args) {
-
         //Initializing servers
         Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
         Server solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
@@ -28,18 +25,18 @@ public class RunCommunicateWithServers {
 
         //Starting  servers
         solveSearchProblemServer.start();
-//        mazeGeneratingServer.start();
-//        stringReverserServer.start();
+        mazeGeneratingServer.start();
+        //stringReverserServer.start();
 
         //Communicating with servers
-//        CommunicateWithServer_MazeGenerating();
+        CommunicateWithServer_MazeGenerating();
         CommunicateWithServer_SolveSearchProblem();
         //CommunicateWithServer_StringReverser();
 
         //Stopping all servers
-//        mazeGeneratingServer.stop();
+        mazeGeneratingServer.stop();
         solveSearchProblemServer.stop();
-//        stringReverserServer.stop();
+        //stringReverserServer.stop();
     }
 
     private static void CommunicateWithServer_MazeGenerating() {
@@ -80,16 +77,9 @@ public class RunCommunicateWithServers {
                         ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
                         ObjectInputStream fromServer = new ObjectInputStream(inFromServer);
                         toServer.flush();
-
-
-//                        MyMazeGenerator mg = new MyMazeGenerator();
-                        EmptyMazeGenerator mg = new EmptyMazeGenerator();
+                        MyMazeGenerator mg = new MyMazeGenerator();
                         Maze maze = mg.generate(50, 50);
                         maze.print();
-
-//                        ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(System.getProperty("java.io.tmpdir")+"\\maze1"));
-//                        Maze maze = (Maze) ois2.readObject();
-
                         toServer.writeObject(maze); //send maze to server
                         toServer.flush();
                         Solution mazeSolution = (Solution) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server

@@ -12,17 +12,13 @@ import algorithms.search.ISearchingAlgorithm;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Server{
     private int port;
     private int timeOut;
-    private ServerStrategy serverStrategy;
+    private IServerStrategy IServerStrategy;
     private volatile boolean stop;
 //    private final int MAXTHREADS = Configurations.getMaxThreadsPerServer();
     private int MAXTHREADS;
@@ -30,37 +26,49 @@ public class Server{
 
 
 
-    public Server (int port, int timeOut, ServerStrategy serverStrategy) {
+    public Server (int port, int timeOut, IServerStrategy IServerStrategy) {
         Configurations.setGeneratingAlgorithm("My");
         Configurations.setMaxThreadsPerServer("5");
         Configurations.setSearchAlgorithm(new BestFirstSearch());
         this.port = port;
         this.timeOut = timeOut;
-        this.serverStrategy = serverStrategy;
+        this.IServerStrategy = IServerStrategy;
         stop = false;
         MAXTHREADS = Configurations.getMaxThreadsPerServer();
         pool = Executors.newFixedThreadPool(MAXTHREADS);
     }
 
+    /**
+     * Starts the server by running it in a different thread.
+     */
     public void start(){
-        new Thread(this::run).start();
+        Runnable r= new Thread(()->run());
+        pool.execute(r);
+
     }
 
+    /**
+     * Running the server on, waiting for clients to connect.
+     * Goes offline when timeOut is up.
+     */
     public void run(){
         try{
             ServerSocket serverSocket = new ServerSocket(this.port);
             serverSocket.setSoTimeout(this.timeOut);
             while(!stop){
                 try {
+//                    Wait for clients at this line.
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Listening to : " + clientSocket.getInetAddress()+ " : " + clientSocket.getLocalPort());
                     System.out.println("Listening from : " + serverSocket.getInetAddress() + " : " + serverSocket.getLocalPort());
 
-                    pool.submit(() -> serverStrategy.handleClient(clientSocket));
+//                  Runs the strategy in a different thread.
+                    Runnable r = new Thread(()-> IServerStrategy.handleClient(clientSocket));
+                    pool.execute(r);
 
                 }
                 catch ( IOException e){
-                    e.printStackTrace();
+                    System.out.println("Waiting for connections...");
                 }
             }
             pool.shutdown();
@@ -71,10 +79,21 @@ public class Server{
         }
     }
 
-    public void stop(){
+    /**
+     * Stop the run of the server.
+     */
+    public void stop() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.stop = true;
     }
 
+    /**
+     * Configurations class, sets configurations to the config.properties file.
+     */
     static class Configurations{
         private static Properties properties = new Properties();
         private static OutputStream output;
