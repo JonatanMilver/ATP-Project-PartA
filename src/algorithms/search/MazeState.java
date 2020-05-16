@@ -1,6 +1,5 @@
 package algorithms.search;
 import algorithms.mazeGenerators.Position;
-import javafx.geometry.Pos;
 
 import java.io.*;
 import java.util.ArrayList;

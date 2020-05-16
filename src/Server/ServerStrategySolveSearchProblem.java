@@ -7,20 +7,25 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class ServerStrategySolveSearchProblem implements ServerStrategy {
+public class ServerStrategySolveSearchProblem implements IServerStrategy {
     private static String solutionsdirPath;
     private static ConcurrentHashMap<String , String> mazeToSol;
-    private static int solnumber;
+    private volatile static AtomicInteger solnumber;
 
     public ServerStrategySolveSearchProblem() {
         solutionsdirPath = System.getProperty("java.io.tmpdir");
-
+        solnumber = new AtomicInteger();
         initializeHashMap();
     }
 
+    /**
+     * Runs the strategy of getting a maze, solving it and returning the solution to the client.
+     * @param client Socket
+     */
     @Override
-    public void handleClient(Socket client) {
+    public synchronized void handleClient(Socket client) {
         try {
             //Create objectInputStream to get the object from inputStream and objectOutputStream to write an object to outputStream.
             ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
@@ -31,7 +36,6 @@ public class ServerStrategySolveSearchProblem implements ServerStrategy {
 
                 Solution mazeSolution;
                 if (checkIfMazeExist(mazeFromClient)){
-                    System.out.println("I'm in!");
                     String stringSol = getMazeToSol().get(Arrays.toString(mazeFromClient.toByteArray()));
                     ObjectInputStream ois = new ObjectInputStream(new FileInputStream(getSolutionsdirPath()+"\\"+stringSol));
                     mazeSolution =  (Solution)ois.readObject();
@@ -42,10 +46,13 @@ public class ServerStrategySolveSearchProblem implements ServerStrategy {
                     ISearchingAlgorithm searchingAlgorithm = Server.Configurations.getSearchAlgorithm();
                     mazeSolution = searchingAlgorithm.solve(searchableMaze);
 
-                    writeToSolDB(mazeFromClient , mazeSolution);
+
+                    writeToSolDB(mazeFromClient);
                     writeMazeToTemp(mazeFromClient);
                     writeSolToFile(mazeSolution);
                     updateHashMap();
+                    solnumber.incrementAndGet();
+
                 }
 
                 solutionToClient.writeObject(mazeSolution);
@@ -65,53 +72,86 @@ public class ServerStrategySolveSearchProblem implements ServerStrategy {
         }
     }
 
+    /**
+     * Checks whether the maze already exists in the Data Base(dictionary)
+     * @param mazeFromClient Maze
+     * @return boolean
+     */
     private boolean checkIfMazeExist(Maze mazeFromClient) {
         String mazeID = Arrays.toString(mazeFromClient.toByteArray());
         return getMazeToSol().containsKey(mazeID);
     }
 
-    private void writeToSolDB(Maze mazeFromClient, Solution mazeSolution) {
+    /**
+     * Writes given maze to the DB(dictionary)
+     * Key - maze represented as byte[]. Value - file's name with auto-increased number.
+     * @param mazeFromClient Maze
+     */
+    private void writeToSolDB(Maze mazeFromClient) {
         String mazeID = Arrays.toString(mazeFromClient.toByteArray());
         String solID = "sol"+solnumber;
 
         getMazeToSol().put(mazeID , solID);
     }
 
+    /**
+     * Writes given maze to temporary folder.
+     * @param mazeFromClient Maze
+     */
     private void writeMazeToTemp(Maze mazeFromClient) {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getSolutionsdirPath()+"\\maze"+solnumber));
+            FileOutputStream file = new FileOutputStream(getSolutionsdirPath()+"\\maze"+solnumber);
+            ObjectOutputStream oos = new ObjectOutputStream(file);
             oos.writeObject(mazeFromClient);
+            oos.flush();
+            oos.close();
+            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Writes given Solution to a file.
+     * @param mazeSolution Solution
+     */
     private void writeSolToFile(Solution mazeSolution) {
         try {
             FileOutputStream fos = new FileOutputStream(getSolutionsdirPath()+"\\sol"+solnumber);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(mazeSolution);
+            oos.flush();
+            oos.close();
+            fos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void initializeHashMap(){
+    /**
+     * Initializes the DB while running the program.
+     * If there's no DB yet, opens one.
+     * Else, loads the DB.
+     */
+    private synchronized void initializeHashMap(){
         if (new File(solutionsdirPath , "solDB").exists()){
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(getSolutionsdirPath()+"\\solDB"));
                 mazeToSol = (ConcurrentHashMap<String, String>) ois.readObject();
-                solnumber = mazeToSol.size();
+                solnumber.set(mazeToSol.size());
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
         else{
             mazeToSol = new ConcurrentHashMap<>();
-            solnumber = 0;
+            solnumber.set(0);
         }
     }
 
+    /**
+     * Updates the solDB file with new inserted elements.
+     */
     private void updateHashMap() {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(getSolutionsdirPath()+"\\solDB"));

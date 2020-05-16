@@ -1,7 +1,5 @@
 package Client;
 
-import Server.Server;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -17,10 +15,16 @@ public class Client{
         this.port = port;
     }
 
+    /**
+     * Communicates with the server in a different thread.
+     */
     public void communicateWithServer(){
         new Thread(()->run()).start();
     }
 
+    /**
+     * Runs a client socket, connects to the server with given port.
+     */
     public void run() {
         try {
             Socket socket = new Socket(host, port);
