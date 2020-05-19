@@ -27,14 +27,12 @@ public class Maze implements Serializable{
     private Position GoalPosition;
     private int[][] mazeArr;
     private Position[][] posArr;
-    private byte[] bytes;
 
     public Maze(int rows, int columns , Position StartPosition,Position GoalPosition) {
         this.rows = rows;
         this.columns = columns;
         mazeArr = new int[rows+rows-1][columns+columns-1];
         posArr = new Position[rows][columns];
-        bytes = null;
 
         buildPositions(rows,columns);
         setNeighbours(rows, columns);
@@ -74,7 +72,7 @@ public class Maze implements Serializable{
      * @throws ClassNotFoundException
      */
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
-        bytes = (byte[]) inputStream.readObject();
+        byte[] bytes = (byte[]) inputStream.readObject();
         initializeMaze(bytes);
     }
 
@@ -84,12 +82,12 @@ public class Maze implements Serializable{
      */
     private void initializeMaze(byte[] decompressed){
         //        Retrieving all the information from the byte[]
-        int rows = new BigInteger(Arrays.copyOfRange(decompressed, 0 , 4)).intValue();
-        int columns = new BigInteger(Arrays.copyOfRange(decompressed, 4 , 8)).intValue();
-        int start_row = new BigInteger(Arrays.copyOfRange(decompressed, 8, 12)).intValue();
-        int start_column = new BigInteger(Arrays.copyOfRange(decompressed, 12, 16)).intValue();
-        int end_row = new BigInteger(Arrays.copyOfRange(decompressed, 16, 20)).intValue();
-        int end_column = new BigInteger(Arrays.copyOfRange(decompressed, 20, 24)).intValue();
+        int rows = new BigInteger(Arrays.copyOfRange(decompressed, 0 , 2)).intValue();
+        int columns = new BigInteger(Arrays.copyOfRange(decompressed, 2 , 4)).intValue();
+        int start_row = new BigInteger(Arrays.copyOfRange(decompressed, 4, 6)).intValue();
+        int start_column = new BigInteger(Arrays.copyOfRange(decompressed, 6, 8)).intValue();
+        int end_row = new BigInteger(Arrays.copyOfRange(decompressed, 8, 10)).intValue();
+        int end_column = new BigInteger(Arrays.copyOfRange(decompressed, 10, 12)).intValue();
         this.rows = (rows+1)/2;
         this.columns = (columns+1)/2;
         this.mazeArr = new int[rows][columns];
@@ -97,7 +95,7 @@ public class Maze implements Serializable{
 //        Setting neighbours and positions
         buildPositions(this.rows, this.columns);
 //      Placing 0/1 at the display ( mazeArr)
-        buildMazeFromBytes(decompressed , columns);
+        buildMazeFromBytes(decompressed , columns, rows);
 //      Setting start and goal position according to given info from the byte array.
         this.StartPosition = posArr[start_row][start_column];
         this.GoalPosition = posArr[end_row][end_column];
@@ -112,14 +110,16 @@ public class Maze implements Serializable{
      * @param decompressed  byte[]
      * @param columns int
      */
-    private void buildMazeFromBytes(byte[] decompressed, int columns){
+    private void buildMazeFromBytes(byte[] decompressed, int columns, int rows){
+        if(decompressed == null)
+            return;
         int decompressed_length = decompressed.length;
         int row = 0;
         int column = 0 ;
-        int decompressed_index = 24;
-        int content_length = decompressed_length - decompressed_index;
+        int decompressed_index = 12;
+        int cont_len = rows*columns;
         //Loop runs until every cell at the maze is filled with wall/pass.
-        while(row*column < content_length){
+        while(row*column < cont_len){
             column = 0;
             while(column < columns) {
                 this.mazeArr[row][column] = decompressed[decompressed_index];
@@ -369,11 +369,8 @@ public class Maze implements Serializable{
 
 
 
-
-
-
     public byte[] toByteArray(){
-        byte[] bytemaze = new byte[24 + (mazeArr.length*mazeArr[0].length)];
+        byte[] bytemaze = new byte[12 + (mazeArr.length*mazeArr[0].length)];
 
         byte[] numOfRows = bigIntToByteArray(mazeArr.length);
         byte[] numOfCols = bigIntToByteArray(mazeArr[0].length);
@@ -385,13 +382,13 @@ public class Maze implements Serializable{
         byte[] endCols = bigIntToByteArray(GoalPosition.getColumnIndex());
 
         copyToBytemaze(numOfRows , bytemaze,0);
-        copyToBytemaze(numOfCols , bytemaze , 4);
-        copyToBytemaze(startRows , bytemaze , 8);
-        copyToBytemaze(startCols , bytemaze , 12);
-        copyToBytemaze(endRows , bytemaze , 16);
-        copyToBytemaze(endCols , bytemaze , 20);
+        copyToBytemaze(numOfCols , bytemaze , 2);
+        copyToBytemaze(startRows , bytemaze , 4);
+        copyToBytemaze(startCols , bytemaze , 6);
+        copyToBytemaze(endRows , bytemaze , 8);
+        copyToBytemaze(endCols , bytemaze , 10);
 
-        int index = 24;
+        int index = 12;
         for (int[] row : mazeArr) {
             for (int j = 0; j < mazeArr[0].length; j++) {
                 bytemaze[index] = (byte) row[j];
@@ -404,7 +401,7 @@ public class Maze implements Serializable{
 
     private void copyToBytemaze(byte[] tocopy, byte[] bytemaze , int fromIndex) {
 
-        for (int i = 0 ; i < 4-tocopy.length ; i++){
+        for (int i = 0 ; i < 2-tocopy.length ; i++){
             bytemaze[fromIndex] = 0;
             fromIndex++;
         }

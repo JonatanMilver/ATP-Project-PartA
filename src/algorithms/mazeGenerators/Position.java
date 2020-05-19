@@ -15,6 +15,7 @@ public class Position implements Serializable{
     private int row;
     private int column;
     private boolean visited;
+    private boolean checked;
     private ArrayList<Position> neighbours;
     private ArrayList<Position> movable_neighbours;
 
@@ -32,6 +33,7 @@ public class Position implements Serializable{
         this.row = row;
         this.column = column;
         this.visited = false;
+        this.checked = false;
         this.neighbours = new ArrayList<Position>();
         this.movable_neighbours = new ArrayList<>();
     }
@@ -40,6 +42,10 @@ public class Position implements Serializable{
     public boolean isVisited() {
         return visited;
     }
+
+    public boolean isChecked() {return checked;}
+
+    public void setChecked(boolean val){this.checked = val;}
 
     public void setVisited(boolean visited) {
         this.visited = visited;
