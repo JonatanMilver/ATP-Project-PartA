@@ -20,6 +20,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
 //        initializeHashMap();
         mazeToSol = new ConcurrentHashMap<>();
         solnumber.set(0);
+
     }
 
     /**
@@ -27,7 +28,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
      * @param client Socket
      */
     @Override
-    public void handleClient(Socket client) {
+    public synchronized void handleClient(Socket client) {
         try {
             //Create objectInputStream to get the object from inputStream and objectOutputStream to write an object to outputStream.
             ObjectInputStream objectInputStream = new ObjectInputStream(client.getInputStream());
@@ -49,7 +50,6 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                     mazeSolution = searchingAlgorithm.solve(searchableMaze);
 
                     writeAllSync(mazeFromClient, mazeSolution);
-
 
                 }
 
