@@ -31,6 +31,7 @@ public class Server{
         this.IServerStrategy = IServerStrategy;
         stop = false;
         MAXTHREADS = Configurations.getMaxThreadsPerServer();
+//        MAXTHREADS = 5;
         pool = (ThreadPoolExecutor)Executors.newFixedThreadPool(MAXTHREADS);
     }
 
@@ -38,7 +39,10 @@ public class Server{
      * Starts the server by running it in a different thread.
      */
     public void start(){
-        new Thread(()->run()).start();
+        Thread r= new Thread(()->run());
+//        pool.execute(r);
+        r.start();
+
     }
 
     /**
@@ -59,8 +63,9 @@ public class Server{
                     Runnable r = new Thread(()-> IServerStrategy.handleClient(clientSocket));
                     pool.submit(r);
                 }
-                catch (IOException e){
-                    System.out.println("Waiting for connections...");
+                catch ( IOException e){
+//                    System.out.println("Waiting for connections...");
+//                    stop=true;
                 }
             }
             pool.shutdown();
@@ -149,7 +154,7 @@ public class Server{
             else if (s == "Simple")
                 return new SimpleMazeGenerator();
             else return new MyMazeGenerator();
-            
+
         }
         public static int getMaxThreadsPerServer(){
             String s;
