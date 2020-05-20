@@ -20,10 +20,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
 //        initializeHashMap();
         mazeToSol = new ConcurrentHashMap<>();
         solnumber.set(0);
-<<<<<<< HEAD
-=======
 
->>>>>>> 6deca6da9641b745c1b2be434884d309b278e9f5
     }
 
     /**
@@ -54,10 +51,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
 
                     writeAllSync(mazeFromClient, mazeSolution);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 6deca6da9641b745c1b2be434884d309b278e9f5
                 }
 
                 solutionToClient.writeObject(mazeSolution);

@@ -59,11 +59,7 @@ public class Server{
                     Runnable r = new Thread(()-> IServerStrategy.handleClient(clientSocket));
                     pool.submit(r);
                 }
-<<<<<<< HEAD
-                catch ( IOException e){
-=======
                 catch (IOException e){
->>>>>>> 6deca6da9641b745c1b2be434884d309b278e9f5
                     System.out.println("Waiting for connections...");
                 }
             }
