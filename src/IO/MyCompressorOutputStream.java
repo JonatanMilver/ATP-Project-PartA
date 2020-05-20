@@ -19,107 +19,13 @@ public class MyCompressorOutputStream extends OutputStream {
 
     }
 
-//    public void write(byte[] b) throws IOException {
-//        boolean countingZeros = true;
-//        int count = 0;
-//
-//        int numOfRows = byteArrayToBigInt(new byte[]{b[0],b[1],b[2],b[3]});
-//        int numOfCols = byteArrayToBigInt(new byte[]{b[4],b[5],b[6],b[7]});
-//        byte[] ret = new byte[24+(numOfRows*numOfCols)];
-//
-//        //coping the first 24 bytes as is
-//        System.arraycopy(b, 0, ret, 0, 24);
-//
-//        int index = 24;
-//
-//        for (int i = 24; i < b.length; i++) {
-//            byte x = b[i];
-//            if (countingZeros) {
-//                if (x == 0) {
-//                    if (count == 255){
-//                        if (b[i+1] == 0){
-//                            ret[index] = (byte) count;
-//                            index++;
-//                            count = 0;
-//                            ret[index] = (byte) count;
-//                            count = 1;
-//                            index++;
-//                        }
-//                        else{
-//                            ret[index] = (byte) count;
-//                            index++;
-//                            count = 1;
-//                            countingZeros = false;
-//                            continue;
-//                        }
-//                    }
-//                    else{
-//                        count++;
-//                    }
-//                }
-//                else {
-//                    ret[index] = (byte) count;
-//                    index++;
-//                    count = 1;
-//                    countingZeros = false;
-//                    continue;
-//                }
-//            }
-//
-//            if (!countingZeros) {
-//                if (x == 1) {
-//                    if (count == 255){
-//                        if (b[i+1] == 1){
-//                            ret[index] = (byte) count;
-//                            index++;
-//                            count = 0;
-//                            ret[index] = (byte) count;
-//                            count = 1;
-//                            index++;
-//                        }
-//                        else{
-//                            ret[index] = (byte) count;
-//                            index++;
-//                            count = 1;
-//                            countingZeros = true;
-//                        }
-//                    }
-//                    else {
-//                        count++;
-//                    }
-//                } else {
-//                    ret[index] = (byte) count;
-//                    index++;
-//                    count = 1;
-//                    countingZeros = true;
-//                }
-//            }
-//        }
-//        ret[index] = (byte) count;
-//
-//        int endingZeros = 0;
-//        for (int i = ret.length-1 ; i > 0 ; i--){
-//            if (ret[i] == 0){
-//                endingZeros++;
-//                continue;
-//            }
-//            break;
-//        }
-//
-//        byte[] returningArray = new byte[ret.length-endingZeros];
-//
-//        //removing the redundant zeros at the end of the array
-//        System.arraycopy(ret, 0, returningArray, 0, returningArray.length);
-////        System.out.println(Arrays.toString(returningArray));
-//
-//
-//        out.write(returningArray);
-//    }
 
     public void write(byte[] b) throws IOException {
+        if(b == null || b.length == 0)
+            return;
         //Will hold all 0/1
-        byte[] tmp = new byte[b.length-24];
-        System.arraycopy(b,24,tmp,0,tmp.length);
+        byte[] tmp = new byte[b.length-12];
+        System.arraycopy(b,12,tmp,0,tmp.length);
 
         int amount_of_ints = 0; //Amount of ints would be held in the int array(after conversion from binary)
         byte[] copy_of_bytes;
@@ -142,12 +48,12 @@ public class MyCompressorOutputStream extends OutputStream {
 
         //Convert the ints to byte arrays and get the bytes ready to write.
         byte[] to_send = buildSendingArray(arr_of_converted_ints);
-        byte[] ret = new byte[24+to_send.length];
+        byte[] ret = new byte[12+to_send.length];
         //Copy the first 24 elements showing maze's details.
-        System.arraycopy(b, 0, ret, 0, 24);
+        System.arraycopy(b, 0, ret, 0, 12);
         int to_send_index = 0 ;
         //Copy the rest of maze's content to "ret"
-        System.arraycopy(to_send, 0, ret, 24, to_send.length);
+        System.arraycopy(to_send, 0, ret, 12, to_send.length);
         out.write(ret);
     }
 
@@ -230,14 +136,5 @@ public class MyCompressorOutputStream extends OutputStream {
         return s;
     }
 
-
-    public byte[] bigIntToByteArray(int i) {
-        BigInteger bigInt = BigInteger.valueOf(i);
-        return bigInt.toByteArray();
-    }
-
-    public int byteArrayToBigInt(byte[] bytes) {
-        return new BigInteger(bytes).intValue();
-    }
 
 }

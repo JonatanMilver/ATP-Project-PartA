@@ -17,47 +17,12 @@ public class MyDecompressorInputStream extends InputStream {
         return 0;
     }
 
-//    /**
-//     * Main function of MyDecompressorInputStream.
-//     * Reads given input(this.in) data which is compressed
-//     * decompresses the data and writes the decompressed data as bytes into byte array maze_bytes
-//     * @param maze_bytes byte []
-//     * @return int
-//     * @throws IOException
-//     */
-//    @Override
-//    public int read(byte[] maze_bytes) throws IOException {
-//        //initialization
-//        int total_length = 24;
-//        for(int i=0;i<24;i++){
-//            maze_bytes[i] = (byte)in.read();
-//        }
-//        //after initialization
-//        //first entry is 0.
-//        byte entry = 0;
-//        //read input stream until it reaches the end(end is when next_byte is -1).
-//        int next_byte = in.read();
-//        while( next_byte != -1){
-//            int nums_amount = 1;
-//            while(nums_amount <= next_byte) {
-//                maze_bytes[total_length] = entry;
-//                total_length++;
-//                nums_amount++;
-//            }
-//            //chooses between the entry 0/1
-//            if(entry == 1)
-//                entry = 0;
-//            else entry = 1;
-//            next_byte = in.read();
-//        }
-//        return 0;
-//    }
 
     private int[] getIntArrFromBytes(byte[] test) throws IOException {
         //Array that will hold the sent data in ints(converted)
-        int[] sent = new int[(test.length-24)/4];
+        int[] sent = new int[(test.length-12)/4];
         int sent_index=0;
-        int j=24;
+        int j=12;
         //read input stream until it reaches the end(end is when next_byte is -1).
         while( j<test.length ){
             //enter each 4 elements from the sent data into a byte array(inner for loop)
@@ -91,16 +56,18 @@ public class MyDecompressorInputStream extends InputStream {
     }
 
     public int read(byte[] maze_bytes) throws IOException {
+        if(in.available() == 0)
+            return -1;
         //initialization
-        for(int i=0;i<24;i++){
+        for(int i=0;i<12;i++){
             maze_bytes[i] = (byte)in.read();
         }
-        int rows = new BigInteger(Arrays.copyOfRange(maze_bytes, 0 , 4)).intValue();
-        int columns = new BigInteger(Arrays.copyOfRange(maze_bytes, 4 , 8)).intValue();
-        byte[] test = new byte[24+in.available()];
+        int rows = new BigInteger(Arrays.copyOfRange(maze_bytes, 0 , 2)).intValue();
+        int columns = new BigInteger(Arrays.copyOfRange(maze_bytes, 2 , 4)).intValue();
+        byte[] test = new byte[12+in.available()];
         System.arraycopy(maze_bytes,0, test, 0, test.length);
         int next = in.read();
-        int pos = 24;
+        int pos = 12;
         while(next != -1){
             test[pos] = (byte)next;
             pos++;
@@ -113,7 +80,7 @@ public class MyDecompressorInputStream extends InputStream {
         String binaryString = convertIntegersToBinaryString(sent);
         int string_index = 0;
         //Writes the entrys into maze_bytes
-        for(int i=24; i<rows*columns+24;i++){
+        for(int i=12; i<rows*columns+12;i++){
             int numeric_val = Character.getNumericValue(binaryString.charAt(string_index));
             maze_bytes[i] = (byte)numeric_val;
             string_index++;

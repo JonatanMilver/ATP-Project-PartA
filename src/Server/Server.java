@@ -20,30 +20,25 @@ public class Server{
     private int timeOut;
     private IServerStrategy IServerStrategy;
     private volatile boolean stop;
-//    private final int MAXTHREADS = Configurations.getMaxThreadsPerServer();
     private int MAXTHREADS;
-    private ExecutorService pool;
+    private ThreadPoolExecutor pool;
 
 
 
     public Server (int port, int timeOut, IServerStrategy IServerStrategy) {
-        Configurations.setGeneratingAlgorithm("My");
-        Configurations.setMaxThreadsPerServer("5");
-        Configurations.setSearchAlgorithm(new BestFirstSearch());
         this.port = port;
         this.timeOut = timeOut;
         this.IServerStrategy = IServerStrategy;
         stop = false;
         MAXTHREADS = Configurations.getMaxThreadsPerServer();
-        pool = Executors.newFixedThreadPool(MAXTHREADS);
+        pool = (ThreadPoolExecutor)Executors.newFixedThreadPool(MAXTHREADS);
     }
 
     /**
      * Starts the server by running it in a different thread.
      */
     public void start(){
-        Thread t = new Thread(this::run);
-        t.start();
+        new Thread(()->run()).start();
     }
 
     /**
@@ -58,13 +53,11 @@ public class Server{
                 try {
 //                    Wait for clients at this line.
                     Socket clientSocket = serverSocket.accept();
-                    System.out.println("Listening to : " + clientSocket.getInetAddress()+ " : " + clientSocket.getLocalPort());
-                    System.out.println("Listening from : " + serverSocket.getInetAddress() + " : " + serverSocket.getLocalPort());
-
+                    if(IServerStrategy == null)
+                        return;
 //                  Runs the strategy in a different thread.
                     Runnable r = new Thread(()-> IServerStrategy.handleClient(clientSocket));
-                    pool.execute(r);
-
+                    pool.submit(r);
                 }
                 catch (IOException e){
                     System.out.println("Waiting for connections...");
@@ -88,6 +81,7 @@ public class Server{
             e.printStackTrace();
         }
         this.stop = true;
+
     }
 
     /**
@@ -100,71 +94,70 @@ public class Server{
 
         static {
             try {
-                output = new FileOutputStream( System.getProperty("user.dir")+"\\resources\\config.properties");
                 input = new FileInputStream(System.getProperty("user.dir")+"\\resources\\config.properties");
+                properties.load(input);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
-        }
+            } catch (IOException e) {
 
-        public static void setSearchAlgorithm(ISearchingAlgorithm algo){
-            if (algo != null) {
-                properties.setProperty("SearchingAlgorithm", algo.getName());
-                store();
-            }
-            else {
-                System.out.println("method input is null!");
             }
         }
-        public static void setGeneratingAlgorithm(String algo){
-            if (algo != null) {
-                properties.setProperty("GeneratingAlgorithm", algo);
-                store();
-            }
-            else {
-                System.out.println("method input is null!");
-            }
-        }
-        public static void setMaxThreadsPerServer(String numberOfThreads){
-            boolean integer = isInteger(numberOfThreads);
-            if (integer){
-                properties.setProperty("MaxTreads" , numberOfThreads);
-                store();
-            }
-            else {
-                System.out.println("method input not an integer!");
-            }
-        }
+//
+//        public static void setSearchAlgorithm(ISearchingAlgorithm algo){
+//            if (algo != null) {
+//                properties.setProperty("SearchingAlgorithm", algo.getName());
+//                store();
+//            }
+//            else {
+//                System.out.println("method input is null!");
+//            }
+//        }
+//        public static void setGeneratingAlgorithm(String algo){
+//            if (algo != null) {
+//                properties.setProperty("GeneratingAlgorithm", algo);
+//                store();
+//            }
+//            else {
+//                System.out.println("method input is null!");
+//            }
+//        }
+//        public static void setMaxThreadsPerServer(String numberOfThreads){
+//            boolean integer = isInteger(numberOfThreads);
+//            if (integer){
+//                properties.setProperty("MaxTreads" , numberOfThreads);
+//                store();
+//            }
+//            else {
+//                System.out.println("method input not an integer!");
+//            }
+//        }
 
 
         public static ISearchingAlgorithm getSearchAlgorithm(){
             String s = properties.getProperty("SearchingAlgorithm");
-            switch (s) {
-                case "BFS":
-                    return new BreadthFirstSearch();
-                case "BestFirstSearch":
-                    return new BestFirstSearch();
-                case "DFS":
-                    return new DepthFirstSearch();
-                default:
-                    throw new NullPointerException("No such searching Algorithm");
-            }
+            if(s == "BFS")
+                return new BreadthFirstSearch();
+            else if( s == "DFS")
+                return new DepthFirstSearch();
+            else return new BestFirstSearch();
+
         }
         public static IMazeGenerator getGeneratingAlgorithm(){
             String s = properties.getProperty("GeneratingAlgorithm");
-            switch (s){
-                case "Empty":
-                    return new EmptyMazeGenerator();
-                case "Simple":
-                    return new SimpleMazeGenerator();
-                case "My":
-                    return  new MyMazeGenerator();
-                default:
-                    throw new NullPointerException("No such generating Algorithm");
-            }
+            if(s=="Empty")
+                return new EmptyMazeGenerator();
+            else if (s == "Simple")
+                return new SimpleMazeGenerator();
+            else return new MyMazeGenerator();
+            
         }
         public static int getMaxThreadsPerServer(){
-            String s = properties.getProperty("MaxTreads");
+            String s;
+            if(properties.getProperty("MaxThreads") != null)
+                s = properties.getProperty("MaxThreads");
+            else{
+                s = "5"; //default
+            }
             return Integer.parseInt(s);
         }
 

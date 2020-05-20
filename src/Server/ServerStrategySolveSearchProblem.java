@@ -17,7 +17,10 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
     public ServerStrategySolveSearchProblem() {
         solutionsdirPath = System.getProperty("java.io.tmpdir");
         solnumber = new AtomicInteger();
-        initializeHashMap();
+//        initializeHashMap();
+        mazeToSol = new ConcurrentHashMap<>();
+        solnumber.set(0);
+
     }
 
     /**
@@ -46,12 +49,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
                     ISearchingAlgorithm searchingAlgorithm = Server.Configurations.getSearchAlgorithm();
                     mazeSolution = searchingAlgorithm.solve(searchableMaze);
 
-
-                    writeToSolDB(mazeFromClient);
-                    writeMazeToTemp(mazeFromClient);
-                    writeSolToFile(mazeSolution);
-                    updateHashMap();
-                    solnumber.incrementAndGet();
+                    writeAllSync(mazeFromClient, mazeSolution);
 
                 }
 
@@ -72,6 +70,13 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
         }
     }
 
+    private synchronized void writeAllSync(Maze mazeFromClient, Solution mazeSolution){
+        writeToSolDB(mazeFromClient);
+        writeMazeToTemp(mazeFromClient);
+        writeSolToFile(mazeSolution);
+        updateHashMap();
+        solnumber.incrementAndGet();
+    }
     /**
      * Checks whether the maze already exists in the Data Base(dictionary)
      * @param mazeFromClient Maze
@@ -133,7 +138,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
      * If there's no DB yet, opens one.
      * Else, loads the DB.
      */
-    private synchronized void initializeHashMap(){
+    /*private synchronized void initializeHashMap(){
         if (new File(solutionsdirPath , "solDB").exists()){
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(getSolutionsdirPath()+"\\solDB"));
@@ -147,7 +152,7 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy {
             mazeToSol = new ConcurrentHashMap<>();
             solnumber.set(0);
         }
-    }
+    }*/
 
     /**
      * Updates the solDB file with new inserted elements.

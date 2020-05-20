@@ -19,7 +19,7 @@ public class Client{
      * Communicates with the server in a different thread.
      */
     public void communicateWithServer(){
-        new Thread(()->run()).start();
+        run();
     }
 
     /**

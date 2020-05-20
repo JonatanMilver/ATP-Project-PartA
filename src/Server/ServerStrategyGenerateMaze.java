@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.Socket;
 
 public class ServerStrategyGenerateMaze implements IServerStrategy {
-
     /**
      * Generates a Maze class according to client's specifications
      * @param client
@@ -26,6 +25,7 @@ public class ServerStrategyGenerateMaze implements IServerStrategy {
                 // int[2] which specifies Maze dimensions
                 int[] mazeSize = (int[])objectInputStream.readObject();
                 IMazeGenerator mazeGenerator = Server.Configurations.getGeneratingAlgorithm();
+
                 // generating maze
                 Maze maze = mazeGenerator.generate(mazeSize[0] , mazeSize[1]);
                 if (maze == null){
