@@ -48,6 +48,7 @@ public class MyCompressorOutputStream extends OutputStream {
 
         //Convert the ints to byte arrays and get the bytes ready to write.
         byte[] to_send = buildSendingArray(arr_of_converted_ints);
+
         byte[] ret = new byte[12+to_send.length];
         //Copy the first 24 elements showing maze's details.
         System.arraycopy(b, 0, ret, 0, 12);
