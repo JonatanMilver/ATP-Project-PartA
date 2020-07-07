@@ -15,6 +15,14 @@ public class Client{
         this.port = port;
     }
 
+    public InetAddress getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
     /**
      * Communicates with the server in a different thread.
      */

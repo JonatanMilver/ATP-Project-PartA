@@ -22,6 +22,7 @@ public class Server{
     private volatile boolean stop;
     private int MAXTHREADS;
     private ThreadPoolExecutor pool;
+    private static Configurations config = Configurations.getInstance();
 
 
 
@@ -40,7 +41,6 @@ public class Server{
      */
     public void start(){
         Thread r= new Thread(()->run());
-//        pool.execute(r);
         r.start();
 
     }
@@ -76,6 +76,31 @@ public class Server{
         }
     }
 
+    public static void setConfigurations(String setProperty, String value){
+        if(setProperty.equals("SearchingAlgorithm")){
+            Configurations.setSearchAlgorithm(value);
+        }
+        else if(setProperty.equals("GeneratingAlgorithm")){
+            Configurations.setGeneratingAlgorithm(value);
+        }
+        else if(setProperty.equals("MaxThreads")){
+            Configurations.setMaxThreadsPerServer(value);
+        }
+    }
+
+    public static String getConfigurations(String property){
+        if(property.equals("SearchingAlgorithm")){
+            return Configurations.getSearchAlgorithm().getName();
+        }
+        if(property.equals("GeneratingAlgorithm")){
+            return Configurations.getGeneratingAlgorithm().toString();
+        }
+        if(property.equals("MaxThreads")){
+            return String.valueOf(Configurations.getMaxThreadsPerServer());
+        }
+        return "";
+    }
+
     /**
      * Stop the run of the server.
      */
@@ -92,66 +117,89 @@ public class Server{
     /**
      * Configurations class, sets configurations to the config.properties file.
      */
-    static class Configurations{
-        private static Properties properties = new Properties();
+    static class Configurations {
+        private static Properties properties;
         private static OutputStream output;
         private static InputStream input;
+        private static Configurations config;
 
-        static {
+        private  Configurations() {
+
             try {
-                input = new FileInputStream(System.getProperty("user.dir")+"\\resources\\config.properties");
+                properties = new Properties();
+                input = new FileInputStream(System.getProperty("user.dir") + "\\resources\\config.properties");
                 properties.load(input);
+                output = new FileOutputStream(System.getProperty("user.dir") + "\\resources\\config.properties");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
 
             }
         }
-//
-//        public static void setSearchAlgorithm(ISearchingAlgorithm algo){
-//            if (algo != null) {
-//                properties.setProperty("SearchingAlgorithm", algo.getName());
-//                store();
-//            }
-//            else {
-//                System.out.println("method input is null!");
-//            }
-//        }
-//        public static void setGeneratingAlgorithm(String algo){
-//            if (algo != null) {
-//                properties.setProperty("GeneratingAlgorithm", algo);
-//                store();
-//            }
-//            else {
-//                System.out.println("method input is null!");
-//            }
-//        }
-//        public static void setMaxThreadsPerServer(String numberOfThreads){
-//            boolean integer = isInteger(numberOfThreads);
-//            if (integer){
-//                properties.setProperty("MaxTreads" , numberOfThreads);
-//                store();
-//            }
-//            else {
-//                System.out.println("method input not an integer!");
-//            }
-//        }
+
+        public static Configurations getInstance(){
+            if(config == null){
+                config = new Configurations();
+            }
+            return config;
+        }
+
+        public static void setSearchAlgorithm(String algo){
+            if (algo != null) {
+                if(properties.containsKey("SearchingAlgorithm"))
+                    properties.replace("SearchingAlgorithm", algo);
+                else{
+                    properties.setProperty("SearchingAlgorithm", algo);
+                }
+                store();
+            }
+            else {
+                System.out.println("method input is null!");
+            }
+        }
+        public static void setGeneratingAlgorithm(String algo){
+            if (algo != null) {
+                if(properties.containsKey("GeneratingAlgorithm"))
+                    properties.replace("GeneratingAlgorithm", algo);
+                else{
+                    properties.setProperty("GeneratingAlgorithm", algo);
+                }
+                store();
+            }
+            else {
+                System.out.println("method input is null!");
+            }
+        }
+        public static void setMaxThreadsPerServer(String numberOfThreads){
+            boolean integer = isInteger(numberOfThreads);
+            if (integer){
+                if(properties.containsKey("MaxThreads"))
+                    properties.replace("MaxThreads" , numberOfThreads);
+                else{
+                    properties.setProperty("MaxThreads" , numberOfThreads);
+                }
+                store();
+            }
+            else {
+                System.out.println("method input not an integer!");
+            }
+        }
 
 
         public static ISearchingAlgorithm getSearchAlgorithm(){
             String s = properties.getProperty("SearchingAlgorithm");
-            if(s == "BFS")
+            if(s.equals("Breadth First Search"))
                 return new BreadthFirstSearch();
-            else if( s == "DFS")
+            else if(s.equals("Depth First Search"))
                 return new DepthFirstSearch();
             else return new BestFirstSearch();
 
         }
         public static IMazeGenerator getGeneratingAlgorithm(){
             String s = properties.getProperty("GeneratingAlgorithm");
-            if(s=="Empty")
+            if(s.equals("EmptyMazeGenerator"))
                 return new EmptyMazeGenerator();
-            else if (s == "Simple")
+            else if (s.equals("SimpleMazeGenerator"))
                 return new SimpleMazeGenerator();
             else return new MyMazeGenerator();
 
